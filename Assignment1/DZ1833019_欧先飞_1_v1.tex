@@ -1,0 +1,265 @@
+\documentclass[a4paper,UTF8]{article}
+\usepackage{ctex}
+\usepackage[margin=1.25in]{geometry}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{enumerate}
+\usepackage{bm}
+\usepackage{hyperref}
+\usepackage{pgfplots}
+\usepackage{epsfig}
+\usepackage{color}
+\usepackage{tcolorbox}
+\usepackage{mdframed}
+\usepackage{lipsum}
+\newmdtheoremenv{thm-box}{myThm}
+\newmdtheoremenv{prop-box}{Proposition}
+\newmdtheoremenv{def-box}{定义}
+
+\setlength{\evensidemargin}{.25in}
+\setlength{\textwidth}{6in}
+\setlength{\topmargin}{-0.5in}
+\setlength{\topmargin}{-0.5in}
+% \setlength{\textheight}{9.5in}
+%%%%%%%%%%%%%%%%%%此处用于设置页眉页脚%%%%%%%%%%%%%%%%%%
+\usepackage{fancyhdr}                                
+\usepackage{lastpage}                                           
+\usepackage{layout}
+\allowdisplaybreaks
+\footskip = 10pt 
+\pagestyle{fancy}                    % 设置页眉                 
+\lhead{2019年春季}                    
+\chead{机器学习理论导引}                                                
+% \rhead{第\thepage/\pageref{LastPage}页} 
+\rhead{作业一}                                                                                               
+\cfoot{\thepage}                                                
+\renewcommand{\headrulewidth}{1pt}  			%页眉线宽，设为0可以去页眉线
+\setlength{\skip\footins}{0.5cm}    			%脚注与正文的距离           
+\renewcommand{\footrulewidth}{0pt}  			%页脚线宽，设为0可以去页脚线
+
+\makeatletter 									%设置双线页眉                                        
+\def\headrule{{\if@fancyplain\let\headrulewidth\plainheadrulewidth\fi%
+\hrule\@height 1.0pt \@width\headwidth\vskip1pt	%上面线为1pt粗  
+\hrule\@height 0.5pt\@width\headwidth  			%下面0.5pt粗            
+\vskip-2\headrulewidth\vskip-1pt}      			%两条线的距离1pt        
+ \vspace{6mm}}     								%双线与下面正文之间的垂直间距              
+\makeatother  
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\numberwithin{equation}{section}
+%\usepackage[thmmarks, amsmath, thref]{ntheorem}
+\newtheorem{myThm}{myThm}
+\newtheorem*{myDef}{Definition}
+\newtheorem*{mySol}{Solution}
+\newtheorem*{myProof}{Proof}
+\newtheorem*{myRemark}{备注}
+
+\newcommand{\indep}{\rotatebox[origin=c]{90}{$\models$}}
+\newcommand*\diff{\mathop{}\!\mathrm{d}}
+
+\usepackage{multirow}
+
+%--
+
+%--
+\begin{document}
+	\renewcommand{\tilde}{\widetilde}
+	\renewcommand{\hat}{\widehat}
+	
+\title{机器学习理论导引\\
+作业一}
+\author{}
+\maketitle
+
+
+\section*{作业提交注意事项}
+\begin{tcolorbox}
+\begin{enumerate}
+  \item[(1)] 请严格参照课程网站作业提交方法一节提交作业;
+  \item[(2)] 未按照要求提交作业，或提交作业格式不正确，将会被扣除部分作业分数；
+  \item[(3)] 截止时间后不接收作业，本次作业记零分。
+\end{enumerate}
+\end{tcolorbox}
+
+\newpage
+
+\section{[20pts] PAC Learning}
+
+讲义中已经证明了轴平行矩形的假设空间是可学习的。这启发我们，无限假设空间也可能是可学习的。本题目给出另一个可学习的无限假设空间的简单的例子。
+
+令$\mathcal{H}$表示一维的阈值函数构成的假设空间，记为 $\mathcal{H} = \left\lbrace h_a: a\in \mathbb{R} \right\rbrace $。此处 $h_a: \mathbb{R} \mapsto \left\lbrace 0,1 \right\rbrace $ 是阈值函数 $h_a(x) = \mathbb{I}_{[x<a]}$，仅当 $x < a$ 时取值为1，否则为0。显然，假设空间 $\mathcal{H}$ 无限大。假设目标概念 $c \in \mathcal{H}$，即该问题是可分的。
+
+\ 
+
+\noindent 请证明：假设空间 $\mathcal{H}$ 是PAC可学习的，使用ERM算法，样本复杂度 $m_{\mathcal{H}} (\epsilon, \delta) \leq \left \lceil \log (2/\delta)/\epsilon \right \rceil $.
+
+\noindent 提示 1：即证明当 $m > \log (2/\delta)/\epsilon$ 时，以 $1-\delta$的概率使得泛化误差 $\mathcal{L}_{\mathcal{D}} (h_S) < \epsilon $.
+
+\noindent 提示 2：在目标概念 $h^*$ 对应的 $a^*$ 左右设置泛化误差带 $a_0 < a^* < a_1$，使得
+$$\Pr_{x \sim \mathcal{D}} \left[ x \in (a_0, a^*) \right]  = \Pr_{x \sim \mathcal{D}} \left[ x \in (a^*, a_1) \right] = \epsilon .$$
+
+\begin{myProof}~\\
+
+由于$\mathcal{H}$是PAC可学习的，所以目标概念$c^*$存在于假设空间$\mathcal{H}$中，而由$\mathcal{H}$的特征可知，存在一个与目标概念$c^*$相对应的实值$a^*$，使得在分布$\mathcal{D}$中所有小于$a^*$的样例其真实标记均为1，同时所有不小于$c^*$的样例其真实标记均为0。取$a_0$和$a_1$$(a_0 < a^* < a_1)$，满足：
+\[
+\Pr_{x \sim \mathcal{D}}[x \in (a_0, a^*)] = \Pr_{x \sim \mathcal{D}}[x \in (a^*, a_1)] = \epsilon
+\]
+
+基于经验误差最小化原则，将算法设计为：如果数据集$D^m$存在标记为1的样本，则将标记为1的样本中最大的样本对应的假设输出，若所有样本的标记均为0，则将最小的样本对应的假设输出，进一步假设$\Pr[x < a*] : \Pr[x \ge a*] = \kappa : (1 - \kappa)$,则有$($还需要分类讨论一下$)$：
+
+$(1)$ 当$\kappa \ge \epsilon$时，
+\begin{eqnarray*}
+\Pr[E(h) > \epsilon] &=& \Pr[\left(\exists x \in D^m x < a_0 \land \forall x \in D^m x \ \notin (a_0, a^*)\right) \lor \forall x \in D^m x > a_1 ] \\
+&=& \Pr[\exists x \in D^m x < a_0 \land \forall x \in D^m x \ \notin (a_0, a^*)] + \Pr[ \forall x \in D^m x > a_1 ] \\
+&=& \left(\sum_{i=1}^m C_m^i (\kappa - \epsilon)^i(1-\kappa)^{m-i}\right) + (1-\kappa - \epsilon)^m \\
+&=& \left(\sum_{i=0}^m C_m^i (\kappa - \epsilon)^i(1-\kappa)^{m-i} - C_m^0(\kappa - \epsilon)^0(1 - \kappa)^m \right) + (1-\kappa - \epsilon)^m \\
+&=& \left((1 - \epsilon)^m - (1 - \kappa)^m \right) + (1-\kappa - \epsilon)^m \\
+&<& (1 - \epsilon)^m + (1- \epsilon)^m \\
+&=& 2(1 - \epsilon)^m \le 2\exp(-m\epsilon) \le \delta \\
+\Longrightarrow m &>& \frac{1}{\epsilon} \ln \frac{2}{\delta} 
+\end{eqnarray*}
+
+$(2)$ 当$\kappa < \epsilon$时，$\Pr[E(h) > \epsilon] = \Pr[\forall x \in D^m x > a_1 ] = (1-\kappa - \epsilon)^m \le \exp(-m\epsilon) \le \delta 	\Longrightarrow m > \frac{1}{\epsilon} \ln \frac{1}{\delta} $。
+
+故样本复杂度$m > \max(\frac{1}{\epsilon} \ln \frac{2}{\delta}, \frac{1}{\epsilon} \ln \frac{1}{\delta}) = \frac{1}{\epsilon} \ln \frac{2}{\delta}$，即$m_{\mathcal{H}}(\epsilon, \delta) \le \lceil \frac{1}{\epsilon} \ln \frac{2}{\delta}\rceil$。
+
+\qed
+\end{myProof}
+\newpage
+\section{[30pts] VC Dimension}
+\noindent 本题目探讨有限假设空间情况下的VC维的性质。
+
+\begin{enumerate}[(1)]
+	\item \textbf{[10pts]}  请证明：对于有限假设空间 $\mathcal{H}$，VC维满足 $\mbox{VC}(\mathcal{H}) \leq \left \lfloor \log(\left| \mathcal{H} \right| ) \right \rfloor$.
+	\item \textbf{[10pts]}  上面已经证明了对于有限假设空间的VC维上界，然而实际的VC维可能会远小于这个上界。请在样本空间 $\mathcal{X} = [0,1]$ 上构造一个无限假设空间 $\mathcal{H}$ 使得 $\mbox{VC}(\mathcal{H}) = 1$.
+	\item \textbf{[10pts]}  请在样本空间 $\mathcal{X} = [0,1]$ 上构造一个有限假设空间 $\mathcal{H}$ 使得 $\mbox{VC}(\mathcal{H}) = \left \lfloor \log_2(\left| \mathcal{H} \right| ) \right \rfloor $.
+\end{enumerate}
+
+\begin{myProof}~\\
+
+$(1)$ 任给数据集$D^m$，若要$\mathcal{H}$能够打散$D^m$，则意味着$\forall \mathrm{b} \in \{0, 1\}^{m} \exists h \in \mathcal{H} \forall x_i \in D^m(  h(x_i) = b_i )$，其中$\{0, 1\}^m$是所有$m$维$01$向量构成的集合，继而有$|\mathcal{H}| \ge |\{0, 1\}^m| = 2^m \Rightarrow m \le \log |\mathcal {H}|$，也就是$VC(\mathcal{H}) \le \lfloor \log |\mathcal{H}| \rfloor$ 。
+
+$(2)$ 假设空间$\mathcal{H} = \{h_a: a \in \mathcal{X}\}$，其中$h_a(x) = \mathbb{I}(x = a)$，易见对于 任意两个样本$x_1, x_2$，不存在假设$h \in \mathcal{H}$使得$h(x_1) = h(x_2) = 1$，因此$\mathcal{H}$无法打散任何大小为2的样本集合，即$VC(\mathcal{H}) = 1$。
+
+$(3)$ 任取$\mathcal{X}$中的$\lfloor \log | \mathcal{H}| \rfloor$个样本$x_1, x_2, ..., x_{\lfloor \log | \mathcal{H}| \rfloor}$，将$\{0, 1\}^{\lfloor \log | \mathcal{H}| \rfloor}$中的元素按字典序从小到大排列，其中第$i$个向量记为$b_i$。同时将$\mathcal{H}$中的第$i$个假设$h_i$定义为$h_i(x_j) = b_i^j$ ($b_i^j$为向量$b_i$的第$j$个元素)。
+易见这样的$\mathcal{H}$可以打散$\{x_1, x_2, ..., x_{\lfloor \log | \mathcal{H}| \rfloor}\}$的任意子集，故$VC(\mathcal{H}) = \lfloor \log_2(|\mathcal{H}|)\rfloor$。
+
+\qed
+\end{myProof}
+
+\newpage
+\section{[20pts] Rademacher Complexity of the Two-Function Hypothesis Set}
+考虑只包含两个函数的假设集$\mathcal{F}$，具体表示为$\mathcal{F} = \{f_1,f_2\}$. 假设对于任意的样本$x \in \mathcal{X}$, 有$f_1(x) = +1$以及$f_2(x) = -1$成立. 对于大小为$m$的样本集$S = \{x_1,\ldots,x_m\}$, 其中$x_i \in \mathcal{X}, \forall i \in \{1,\ldots,m\}$. 试证明：假设集$\mathcal{F}$关于样本集$S$的经验Rademacher复杂度上界为$1/\sqrt{m}$，即
+\begin{equation}
+	\label{eq:upper-bound-empirical-Rad}
+	\hat{\mathfrak{R}}_S(\mathcal{F}) \leq \frac{1}{\sqrt{m}}.
+\end{equation}
+
+\begin{myProof}~\\
+仿照课程第4章的内容，借助hoeffding不等式，可以获得一个渐进复杂度一样的界，不过常数大一点：
+\begin{eqnarray*}
+\exp[tE_{\sigma}(\sup_{f \in \mathcal{\mathcal{F}}} \sum_{i = 1}^m \sigma_i f(z_i))] &\le& E_{\sigma}[\exp(t\sup_{f \in \mathcal{F}} \sum_{i = 1}^m \sigma_i f(z_i))] \\
+&=& E_{\sigma}[\sup_{f \in \mathcal{F}}\exp(t \sum_{i = 1}^m \sigma_i f(z_i))] \\
+&\le& \sum_{f\in \mathcal{F}} E_{\sigma}[\exp(t \sum_{i = 1}^m \sigma_i f(z_i))] \\
+&=& \sum_{f\in \mathcal{F}} \prod_{i=1}^m E_{\sigma_i}[\exp(t \sigma_i f(z_i))] \\
+&\le& \sum_{f\in \mathcal{F}} \prod_{i=1}^m \exp [\frac{t^2(2f(z_i)^2)}{8}] \\
+&=& 2\exp(\frac{mt^2}{2}) \\
+\Longrightarrow E_{\sigma}[\sup_{f \in \mathcal{F}} \sum_{i = 1}^m \sigma_i f(z_i)] &\le& \frac{\ln2}{t} + \frac{mt}{2} \\
+\Longrightarrow E_{\sigma}[\sup_{f \in \mathcal{F}} \sum_{i = 1}^m \sigma_i f(z_i)] &\le& (\frac{\ln2}{t} + \frac{mt}{2})_{min} = \sqrt{2m\ln2} \\
+\Longrightarrow \hat{\mathfrak{R}}_S(\mathcal{F}) = E_{\sigma}[\sup_{f \in \mathcal{F}} \frac{1}{m} \sum_{i = 1}^m \sigma_i f(z_i)] &\le& \sqrt{\frac{2\ln2}{m}} \\
+\end{eqnarray*}
+
+如果直接按照定义可以证明$\hat{\mathfrak{R}}_S(\mathcal{F}) = \frac{1}{2^{m-1}} \binom{m-1}{\lfloor \frac{m-1}{2} \rfloor}$，设$\Sigma_+$为所有$\sigma_i$取值为$+1$的集合，$\Sigma_-$为所有$\sigma_i$取值为$-1$的集合，以下按奇偶对m进行讨论：
+
+当$m=2k + 1$时，
+\begin{eqnarray*}
+\hat{\mathfrak{R}}_S(\mathcal{F}) &=& E_{\sigma}[\sup_{f \in \mathcal{F}} \sum_{i = 1}^m \sigma_i f(z_i)] \\
+&=& \sum_{i=0}^{k} \Pr (|\Sigma_+|=i)\frac{1}{m}(2k + 1 - 2i) + \sum_{i=0}^{k} \Pr (|\Sigma_-|=i)\frac{1}{m}(2k + 1 - 2i) \\
+&=& 2 \sum_{i=0}^{k} \frac{\binom{2k+1}{i}}{2^{2k+1}} \frac{1}{2k+1}(2k+1-2i) \\
+&=& \frac{1}{2^{2k}} \sum_{i=0}^{k} \binom{2k+1}{i} (1 - \frac{2i}{2k+1}) \\
+&=& \frac{1}{2^{2k}} \sum_{i=0}^{k} \binom{2k+1}{i} - \frac{1}{2^{2k}} \sum_{i=1}^{k} \frac{2}{2k+1} (2k+1) \binom{2k}{i-1} \\
+&=& 1 - \frac{2}{2^{2k}} \sum_{i=1}^k \binom{2k}{i-1} = 1 - \frac{2}{2^{2k}} \sum_{i=0}^k \binom{2k}{i} \\
+&=& 1- \frac{2}{2^{2k}} \frac{1}{2} (2^{2k} - \binom{2k}{k}) = 1 - \frac{1}{2^{2k}} (2^{2k} - \binom{2k}{k}) \\
+&=& \frac{1}{2^{2k}} \binom{2k}{k} = \frac{1}{2^{m-1}}\binom{m-1}{\lfloor \frac{m-1}{2} \rfloor}
+\end{eqnarray*}
+
+当$m=2k$时，
+\begin{eqnarray*}
+\hat{\mathfrak{R}}_S(\mathcal{F}) &=& E_{\sigma}[\sup_{f \in \mathcal{F}} \sum_{i = 1}^m \sigma_i f(z_i)] \\
+&=& \sum_{i=0}^{k} \Pr(|\Sigma_+|=i) \frac{1}{m}(2k-2i) + \sum_{i=0}^{k-1} \Pr(|\Sigma_-|=i) \frac{1}{m}(2k-2i) \\
+&=& \sum_{i=0}^k \frac{1}{2^{2k}} \binom{2k}{i} \frac{2k-2i}{2k} + \sum_{i=0}^{k-1} \frac{1}{2^{2k}} \binom{2k}{i} \frac{2k-2i}{2k} \\
+&=& 2 \sum_{i=0}^{k-1} \frac{1}{2^{2k}} \binom{2k}{i} (1 - \frac{i}{k}) \\
+&=& \frac{1}{2^{2k-1}} \left[ \sum_{i=0}^{k-1} \binom{2k}{i} - \frac{1}{k} \sum_{i=0}^{k-1} i \binom{2k}{i} \right] \\
+&=& \frac{1}{2^{2k-1}} \left[ \frac{1}{2}(2^{2k} - \binom{2k}{k} )- \frac{2k}{k} \sum_{i=1}^{k-1} \binom{2k-1}{i-1} \right] \\
+&=& \frac{1}{2^{2k-1}} \left[ 2^{2k-1} - \frac{1}{2} \binom{2k}{k} - 2\sum_{i=0}^{k-2} \binom{2k-1}{i} \right] \\
+&=& \frac{1}{2^{2k-1}} \left[ 2^{2k-1} - \frac{1}{2} \binom{2k}{k} - (2^{2k-1} - 2 \binom{2k-1}{k}) \right] \\
+&=& \frac{1}{2^{2k-1}} \left[ 2 \binom{2k-1}{k} - \frac{1}{2} \binom{2k}{k} \right] = \frac{1}{2k} \left[ 4 \frac{(2k-1)!}{k!(k-1)!} - \frac{(2k)!}{k!k!} \right] \\
+&=& \frac{1}{2^{2k}} \left[ \frac{1}{k!k!} (4k(2k-1)! - (2k)!) \right] = \frac{1}{2^{2k}} \frac{(2k)!}{k!k!} \\
+&=& \frac{1}{2^{2k}}\binom{2k}{k} = \frac{1}{2^{2k-1}}\binom{2k-1}{k-1} = \frac{1}{2^{m-1}}\binom{m-1}{\lfloor \frac{m-1}{2} \rfloor} \\
+\end{eqnarray*}
+
+由于当$m=2k$和$m=2k+1$时，$\hat{\mathfrak{R}}_S(\mathcal{F})$均等于$\frac{1}{2^{2k}}\binom{2k}{k}$，且$\frac{1}{\sqrt{2k + 1}} < \frac{1}{\sqrt{2k}}$，故可以统一两者的讨论，仅需证明$\frac{1}{2^{2k}}\binom{2k}{k} \le \frac{1}{\sqrt{2k+1}}$对任意$k > 0$均成立即可。容易验证对$k=1$命题成立，归纳假设$k=n$时不等式成立，则当$k=n+1$时$\frac{1}{2^{2n+2}} \binom{2n+2}{n+1} = \frac{1}{2^{2n+2}} \frac{(2n+2)!}{(n+1)!(n+1)!} \le \frac{(2n+1)(2n+2)}{4(n+1)^2} \frac{1}{\sqrt{2n+1}} = \sqrt{\frac{(2n+1)^2(2n+2)^2}{(2n+2)^4(2n+1)}} = \sqrt{\frac{1}{2n+3} \frac{(2n+2)^2 - 1}{(2n+2)^2}} < \sqrt{\frac{1}{2n+3}} $，由此可知对$k>0$，不等式$\frac{1}{2^{2k}}\binom{2k}{k} \le \frac{1}{\sqrt{2k+1}}$恒成立，因此$\hat{\mathfrak{R}}_S(\mathcal{F}) \le \frac{1}{\sqrt{m}}$。
+
+\qed
+\end{myProof}
+\newpage
+
+\section{[30pts] Rademacher Complexity Property}
+固定正整数$m\geq 1$，对任意实数$\alpha\in \mathbb R$以及由$\mathcal{X} \mapsto \mathbb R$的映射组成的任意两个假设集$\mathcal{H}_1$、$\mathcal{H}_2$，试证明下列关于Rademacher复杂度的等式/不等式成立。
+\begin{enumerate}[ {(}1{)}]
+\item \textbf{[10pts]} $\mathfrak{R}_m(\alpha \mathcal{H}_1) = |\alpha|\mathfrak{R}_m(\mathcal{H}_1)$.
+\item \textbf{[10pts]} $\mathfrak{R}_m(\mathcal{H}_1 + \mathcal{H}_2) = \mathfrak{R}_m(\mathcal{H}_1) + \mathfrak{R}_m(\mathcal{H}_2)$, 其中假设集$\mathcal{H}_1 + \mathcal{H}_2$具体可表达为$\mathcal{H}_1 + \mathcal{H}_2 = \{h_1 + h_2: h_1\in \mathcal{H}_1, h_2\in \mathcal{H}_2\}$.
+\item \textbf{[10pts]} $\mathfrak{R}_m(\mathcal{H}) \leq \mathfrak{R}_m(\mathcal{H}_1) + \mathfrak{R}_m(\mathcal{H}_2)$, 其中假设集$\mathcal{H}$定义为$\mathcal{H} = \{\max(h_1,h_2): h_1\in \mathcal{H}_1, h_2\in \mathcal{H}_2\}$.
+\end{enumerate}
+
+\noindent 提示：最后一问中你可能会用到Talagrand's Lemma（又称为Contraction Lemma）. 具体可参见参考文献[1]中Lemma 26.9（书第26章，pp. 381-382）[\href{http://www.cs.huji.ac.il/~shais/UnderstandingMachineLearning/copy.html}{参考链接}].
+\begin{myProof}~\\
+
+$(1)$
+\begin{eqnarray*}
+\mathfrak{R}_m(\alpha \mathcal{H}) &=& E_{D^m, \sigma}[\sup_{h \in \alpha \mathcal{H}} \frac{1}{m} \sum_{i=1}^m \sigma_i h(x_i)] \\
+&=& E_{D^m, \sigma}[\sup_{h \in \mathcal{H}} \frac{1}{m} \sum_{i=1}^m \sigma_i \alpha h(x_i)] \\
+&=& \left\{
+\begin{array}{lr}
+	\alpha E_{D^m, \sigma}[\sup_{h \in \mathcal{H}} \frac{1}{m} \sum_{i=1}^m \sigma_i h(x_i)], &\alpha > 0 \\
+	(-\alpha) E_{D^m, \sigma}[\sup_{h \in \mathcal{H}} \frac{1}{m} \sum_{i=1}^m -\sigma_i h(x_i)], &\alpha \le 0 \\
+\end{array}
+\right. \\
+&=& |\alpha| E_{D^m, \sigma}[\sup_{h \in \alpha \mathcal{H}} \frac{1}{m} \sum_{i=1}^m \sigma_i h(x_i)] \\
+&=& |\alpha| \mathfrak{R}_m(\mathcal{H})
+\end{eqnarray*}
+
+$(2)$
+\begin{eqnarray*}
+\mathfrak{R}_m(\mathcal{H}_1 + \mathcal{H}_2) &=& E_{D^m, \sigma}[\sup_{h \in \mathcal{H}_1 + \mathcal{H}_2} \frac{1}{m} \sum_{i=1}^m \sigma_i h(x_i)] \\
+&=& E_{D^m, \sigma}[\sup_{h_1 \in \mathcal{H}_1, h_2 \in \mathcal{H}_2} \frac{1}{m} \sum_{i=1}^m \sigma_i \left( h_1(x_i) + h_2(x_i) \right)] \\
+&=& E_{D^m, \sigma}[\sup_{h_1 \in \mathcal{H}_1} \frac{1}{m} \sum_{i=1}^m \sigma_i  h_1(x_i) + \sup_{h_2 \in \mathcal{H}_2} \frac{1}{m} \sum_{i=1}^m \sigma_i  h_2(x_i) ] \\
+&=& E_{D^m, \sigma}[\sup_{h_1 \in \mathcal{H}_1} \frac{1}{m} \sum_{i=1}^m \sigma_i  h_1(x_i)] + E_{D^m, \sigma}[\sup_{h_2 \in \mathcal{H}_2} \frac{1}{m} \sum_{i=1}^m \sigma_i  h_2(x_i) ] \\
+&=& \mathfrak{R}_m(\mathcal{H}_1) + \mathfrak{R}_m(\mathcal{H}_2)\\
+\end{eqnarray*}
+
+$(3)$ 由Contraction Lemma有$\mathfrak{R}_m(|\mathcal{H}_1 - \mathcal{H}_2|) \le \mathfrak{R}_m(\mathcal{H}_1 - \mathcal{H}_2)$，
+\begin{eqnarray*}
+\mathfrak{R}_m(\mathcal{H}) &=& \mathfrak{R}_m(\max(\mathcal{H}_1, \mathcal{H}_2)) \\
+&=& E_{D^m, \sigma}[\sup_{h_1 \in \mathcal{H}_1, h_2 \in \mathcal{H}_2} \frac{1}{m} \sum_{i=1}^m \sigma_i \left( \max(h_1(x_i), h_2(x_i)) \right)] \\
+&=& E_{D^m, \sigma}[\sup_{h_1 \in \mathcal{H}_1, h_2 \in \mathcal{H}_2} \frac{1}{m} \sum_{i=1}^m \sigma_i \left( \frac{1}{2} (h_1(x_i) + h_2(x_i) + |h_1(x_i) - h_2(x_i)| ) \right)] \\
+&=& E_{D^m, \sigma}[\sup_{h_1 \in \mathcal{H}_1, h_2 \in \mathcal{H}_2} \frac{1}{m} \sum_{i=1}^m \sigma_i \left( \frac{1}{2} (h_1(x_i) + h_2(x_i) + |h_1(x_i) - h_2(x_i)| ) \right)] \\
+&=& \frac{1}{2} \left( \mathfrak{R}_m(\mathcal{H}_1) + \mathfrak{R}_m(\mathcal{H}_2) \right) + \frac{1}{2} \left( \mathfrak{R}_m(|\mathcal{H}_1 - \mathcal{H}_2 | ) \right) \\
+&\le& \frac{1}{2} \left( \mathfrak{R}_m(\mathcal{H}_1) + \mathfrak{R}_m(\mathcal{H}_2) \right) + \frac{1}{2} \left( \mathfrak{R}_m(\mathcal{H}_1 - \mathcal{H}_2) \right) \\
+&=& \frac{1}{2} \left( \mathfrak{R}_m(\mathcal{H}_1) + \mathfrak{R}_m(\mathcal{H}_2) \right) + \frac{1}{2} \left( \mathfrak{R}_m(\mathcal{H}_1) + \mathfrak{R}_m(- \mathcal{H}_2) \right) \\
+&=& \frac{1}{2} \left( \mathfrak{R}_m(\mathcal{H}_1) + \mathfrak{R}_m(\mathcal{H}_2) \right) + \frac{1}{2} \left( \mathfrak{R}_m(\mathcal{H}_1) + \mathfrak{R}_m( \mathcal{H}_2) \right) \\
+&=& \mathfrak{R}_m(\mathcal{H}_1) + \mathfrak{R}_m(\mathcal{H}_2) \\
+\end{eqnarray*}
+
+\qed
+\end{myProof}
+
+\newpage
+\section*{Reference}
+\begin{enumerate}[ {[}1{]}]
+\item Shai Shalev-Shwartz and Shai Ben-David. Understanding Machine Learning: From Theory to Algorithms. Cambridge University Press, 2014.
+\end{enumerate}
+\end{document}

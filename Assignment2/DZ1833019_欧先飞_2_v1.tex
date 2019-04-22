@@ -1,0 +1,164 @@
+\documentclass[a4paper,UTF8]{article}
+\usepackage{ctex}
+\usepackage[margin=1.25in]{geometry}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{enumerate}
+\usepackage{bm}
+\usepackage{tcolorbox}
+\usepackage{hyperref}
+\usepackage{pgfplots}
+\usepackage{epsfig}
+\usepackage{color}
+\usepackage{mdframed}
+\usepackage{lipsum}
+\newmdtheoremenv{thm-box}{myThm}
+\newmdtheoremenv{prop-box}{Proposition}
+\newmdtheoremenv{def-box}{定义}
+
+\setlength{\evensidemargin}{.25in}
+\setlength{\textwidth}{6in}
+\setlength{\topmargin}{-0.5in}
+\setlength{\topmargin}{-0.5in}
+% \setlength{\textheight}{9.5in}
+%%%%%%%%%%%%%%%%%%此处用于设置页眉页脚%%%%%%%%%%%%%%%%%%
+\usepackage{fancyhdr}                                
+\usepackage{lastpage}                                           
+\usepackage{layout}                                             
+\footskip = 10pt 
+\pagestyle{fancy}                    % 设置页眉                 
+\lhead{2019年春季}                    
+\chead{机器学习理论导引}                                                
+% \rhead{第\thepage/\pageref{LastPage}页} 
+\rhead{作业二}                                                                                               
+\cfoot{\thepage}                                                
+\renewcommand{\headrulewidth}{1pt}  			%页眉线宽，设为0可以去页眉线
+\setlength{\skip\footins}{0.5cm}    			%脚注与正文的距离           
+\renewcommand{\footrulewidth}{0pt}  			%页脚线宽，设为0可以去页脚线
+
+\makeatletter 									%设置双线页眉                                        
+\def\headrule{{\if@fancyplain\let\headrulewidth\plainheadrulewidth\fi%
+		\hrule\@height 1.0pt \@width\headwidth\vskip1pt	%上面线为1pt粗  
+		\hrule\@height 0.5pt\@width\headwidth  			%下面0.5pt粗            
+		\vskip-2\headrulewidth\vskip-1pt}      			%两条线的距离1pt        
+	\vspace{6mm}}     								%双线与下面正文之间的垂直间距              
+\makeatother  
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\numberwithin{equation}{section}
+%\usepackage[thmmarks, amsmath, thref]{ntheorem}
+\newtheorem{theorem}{Theorem}
+\newtheorem*{myDef}{Definition}
+\newtheorem*{mySol}{Solution}
+\newtheorem*{myProof}{Proof}
+\newtheorem*{myRemark}{备注}
+\newcommand{\indep}{\rotatebox[origin=c]{90}{$\models$}}
+\newcommand*\diff{\mathop{}\!\mathrm{d}}
+
+\usepackage{multirow}
+
+%--
+
+%--
+\begin{document}
+\renewcommand{\tilde}{\widetilde}
+\renewcommand{\hat}{\widehat}
+
+	\title{机器学习理论导引\\
+		作业二}
+	\author{姓名，邮箱}
+	\maketitle
+	
+	
+	\section{[30pts] Generalization}
+	
+	机器学习中，我们总会通过先验知识对假设空间进行限制. 例如SVM中使用的典型超平面族$\mathcal{H} = \left\lbrace \boldsymbol{x} \mapsto \boldsymbol{w}^{\top}\boldsymbol{x} : \left\| \boldsymbol{w} \right\| \leq \Lambda  \right\rbrace $（见讲义的定理5.10）. 因为虽然大的假设空间更可能包含目标概念，但对应的学习难度即样本复杂度也随之增大，从而导致泛化性变差.
+	
+	
+	\begin{enumerate}[(1)]
+		\item \textbf{[10pts]}  试通过VC维的泛化误差界来解释对假设空间进行限制的合理性。
+		
+		\item \textbf{[10pts]}  试通过Rademacher的泛化误差界来解释对假设空间进行限制的合理性。
+		
+		\item \textbf{[10pts]}	二者的泛化误差界哪个更紧？为什么？
+	\end{enumerate}
+	
+	
+	\begin{myProof}
+		
+		$(1)$ 因为$\Pr[E(h) \le \hat{E}(h) + \left( \frac{em}{d}\right)^d  + \sqrt{\frac{\ln 1 / \delta}{2m}}] \ge 1 - \delta$，而当对假设空间进行限制时，相应的该假设空间的VC维也倾向于降低$($因为假设空间更小了，VC维无论如何不会变大$)$，从该不等式获得的泛化误差的上界也会相应的变小，从而学习算法的泛化性能可以更好。
+		
+		$(2)$ 因为$\Pr[E(h) \le \hat{E}(h) + \mathfrak{R}_m(\mathcal{H})  + \sqrt{\frac{\ln 1 / \delta}{2m}}] \ge 1 - \delta$，当假设空间受限之后，$\mathfrak{R}_m(\mathcal{H}) = E_{D^m, \sigma}[\sup_{h \in \mathcal{H}}\frac{1}{m} \sum_{i=1}^m \sigma_i h(x_i) ]$式中$\sup_{h \in \mathcal{H}}\frac{1}{m} \sum_{i=1}^m \sigma_i h(x_i)$也将倾向于更小$($无论如何不会更大$)$，从而由该不等式获得的泛化误差的上界也会更小。
+		
+		$(2)$ 基于Rademacher的更紧，因为$\mathfrak{R}_m(\mathcal{H}) \le \left( \frac{em}{d}\right)^d$。
+		
+		~\\
+		~\\
+		~\\
+		~\\
+		\qed
+	\end{myProof}
+	\newpage
+	\section{[20pts] Stability}
+	\noindent
+	
+	\begin{enumerate}[ {(}1{)}]
+		\item \textbf{[10pts]} 为了应对未知的测试情况，实际机器学习算法在选择超参数取值时，通常通过交叉验证的方式来估计泛化能力。请讨论留一法交叉验证估计学习算法泛化能力的合理性（从稳定性的角度进行分析；留一法交叉验证参考周志华《机器学习》26页）。
+		\item \textbf{[10pts]} 假设讲义中定理6.1所需的条件均满足，如果算法非常稳定, 即$\beta\rightarrow 0$, 是否可以通过同样的分析得到优于$\mathcal{O}(1/\sqrt{m})$的泛化界?
+	\end{enumerate}
+	
+	
+	\begin{myProof}
+		~\\
+		~\\
+		~\\
+		~\\
+		\qed
+	\end{myProof}
+	
+	\newpage
+	\section{[20pts] Optimality of Bayes Classifier}
+	对任意定义在$\mathcal{X}\times\{0,1\}$上的概率分布$\mathcal{D}$，考虑所有分类器$g:\mathcal X \mapsto \{0,1\}$，特定的，记$f_{\mathcal{D}}$为Bayes分类器，其定义如下：
+	\[
+	f_{\mathcal{D}} = 
+	\begin{cases}
+	1,&\mbox{if }\Pr[y=1|x]\geq 1/2\\
+	0,&\mbox{otherwise}
+	\end{cases}
+	\]
+	试证明，Bayes分类器$f_{\mathcal D}$是最优的，即对任何分类器$g$，有$R(f_{\mathcal D}) \leq R(g)$，其中$R(g)$是分类器$g$在未知数据分布$\mathcal{D}$的泛化误差，$R(g) = \Pr_{(x,y) \sim \mathcal{D}}[g(x) \neq y]$。
+	
+	\begin{myProof}~\\
+		~\\
+		~\\
+		~\\
+		~\\	
+		\qed
+	\end{myProof}
+	\newpage
+	
+	\section{[30pts] SVM with Squared Hinge Loss Function}
+	在支持向量机（Support Vector Machine，SVM）的实际使用中，人们经常采用平方hinge损失函数（squared hinge loss function）。记损失函数为$\ell: \mathcal{Y}'\times \mathcal{Y} \mapsto \mathbb{R}_+$, 其中$\mathcal{Y}' \subset \mathbb{R}$且$\mathcal{Y} = \{-1,+1\}$，平方hinge损失函数的定义可写为
+	\begin{equation}
+	\label{eq:squared-hinge-loss}
+	\ell(y',y) = ([1-yy']_+)^2,
+	\end{equation}
+	其中符号$[x]_+$表示取$x$的非负部分，即$[x]_+ = x$如果$x\geq 0$；否则$[x]_+ = 0$. 本题目中，我们采用第六讲中所讲授的\emph{稳定性}工具对平方hinge损失SVM的泛化性进行分析。
+	
+	\begin{enumerate}[ {(}1{)}]
+		\item \textbf{[10pts]} 假设对于任意的分类器$h\in \mathcal{H}$及样本$x\in \mathcal{X}$，均有$\lvert h(x) \rvert \leq M$，试证明平方hinge损失函数是有界的，并给出上界。
+		\item \textbf{[20pts]} 试利用\emph{稳定性}分析工具推导基于平方hinge损失SVM的泛化界。请给出严格的结论表述和具体的推导过程。
+	\end{enumerate}
+	
+	\begin{myProof}~\\
+	~\\
+	~\\
+	~\\
+	~\\
+	\qed
+	\end{myProof}
+	
+\end{document}
