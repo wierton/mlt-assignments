@@ -88,11 +88,11 @@
 	
 	
 	\begin{myProof}~\\
-$(1)$ 因为$\Pr[E(h) \le \hat{E}(h) + \left( \frac{em}{d}\right)^d  + \sqrt{\frac{\ln 1 / \delta}{2m}}] \ge 1 - \delta$，而当对假设空间进行限制时，相应的该假设空间的VC维也倾向于降低$($因为假设空间更小了，VC维无论如何不会变大$)$，从该不等式获得的泛化误差的上界也会相应的变小，从而学习算法的泛化性能可以更好。
+$(1)$ 因为$\Pr[E(h) \le \hat{E}(h) +  \sqrt{\frac{2d\ln \frac{em}{d}}{m}} + \sqrt{\frac{\ln 1 / \delta}{2m}}] \ge 1 - \delta$，而当对假设空间进行限制时，相应的该假设空间的VC维也倾向于降低$($因为假设空间更小了，VC维无论如何不会变大$)$，从该不等式获得的泛化误差的上界也会相应的变小，从而学习算法的泛化性能可以更好。
 ~\\
 $(2)$ 因为$\Pr[E(h) \le \hat{E}(h) + \mathfrak{R}_m(\mathcal{H})  + \sqrt{\frac{\ln 1 / \delta}{2m}}] \ge 1 - \delta$，当假设空间受限之后，$\mathfrak{R}_m(\mathcal{H}) = E_{D^m, \sigma}[\sup_{h \in \mathcal{H}}\frac{1}{m} \sum_{i=1}^m \sigma_i h(x_i) ]$式中$\sup_{h \in \mathcal{H}}\frac{1}{m} \sum_{i=1}^m \sigma_i h(x_i)$也将倾向于更小$($无论如何不会更大$)$，从而由该不等式获得的泛化误差的上界也会更小。
 ~\\
-$(3)$ 基于Rademacher的更紧，因为$\mathfrak{R}_m(\mathcal{H}) \le \left( \frac{em}{d}\right)^d$。
+$(3)$ 基于Rademacher的更紧，因为$\mathfrak{R}_m(\mathcal{H}) \le \sqrt{\frac{2\ln \prod_\mathcal{H}(m)}{m}}$，且$\prod_{\mathcal{H}}(m) \le \left( \frac{em}{d}  \right)^d$，两者结合一下便有$\mathfrak{R}_m(\mathcal{H}) \le \sqrt{\frac{2d \ln \frac{em}{d}}{m}}$，所以基于Rademacher的泛化误差界更紧。
 		
 		~\\
 		~\\
@@ -181,8 +181,19 @@ $(2)$ slides中推导所得的泛化损失的界$\Pr[ \ell(\mathfrak{L}, D) \le 
 	\begin{myProof}~\\
 $(1)$首先容易证明$[a+b]_+ \le |a| + |b|$，所以有$\ell(h(x), y) = ([1 - h(x)y]_+)^2 \le (1 + |h(x)|)^2 \le (1 + M)^2$。
 ~\\
-$(2)$由于$|\ell(h(a), y) - \ell(h(b), y)| = | ([1 - h(a)y]_+)^2 - ([1 - h(b)y]_+)^2 | \le | (1 + |h(a)y|)^2 - (1 + |h(b)y|)^2 | = | (1 + |h(a)|)^2 - (1 + |h(b)|)^2 | = | (h(a) +  h(b) + 2) | |h(a) - h(b)| \le (2M + 2) |h(a) - h(b)|$，所以损失函数$\ell$对于假设空间$\mathcal{H}$是$\sigma$-可容许的，其中$\sigma=2M+2$。
-然后由slides上的命题6.1知SVMs具有$\gamma$-稳定性，$\gamma < \frac{4(M+1)^2r^2}{m\lambda}$，所以$\ell(\mathcal{L, D}) \le \hat{\ell}(\mathcal{L}, D) + \gamma + (2m\gamma + M) \sqrt{\frac{\ln 1/\delta}{2m}} < \hat{\ell}(\mathcal{L}, D) + \frac{4(M+1)^2r^2}{m\lambda} + (\frac{8(M+1)^2r^2}{\lambda} + M) \sqrt{\ln 1/\delta}{2m}$，以至少$1 - \delta$的概率成立。
+$(2)$首先容易证明$[a]_+ \le |a|$, 由于$|\ell(h(a), y) - \ell(h(b), y)| = | ([1 - h(a)y]_+)^2 - ([1 - h(b)y]_+)^2 | $
+，以下分类讨论证明$\ell(h(x), y)$满足lipschitz条件：
+
+若 $1 - h(b)y \le 0$且$1 - h(a)y \le 0$，则$| ([1 - h(a)y]_+)^2 - ([1 - h(b)y]_+)^2 | = 0 \le 2(M+1)|h(a) - h(b)|$。
+
+若 $1 - h(b)y \le 0$且$1 - h(a)y > 0$，则$h(b)y \ge 1$，$| ([1 - h(a)y]_+)^2 - ([1 - h(b)y]_+)^2 | = |([1 - h(a)y]_+)^2| \le |[h(b)y - h(a)y)]_+|^2 \le |h(b)y - h(a)y|^2 = |h(b)-h(a)||h(b)-h(a)|y^2 \le 2M|h(a) - h(b)| < 2(M+1)|h(a) - h(b)|$。
+
+若 $1 - h(b)y > 0$且$1 - h(a)y \le 0$，则$h(a)y \ge 1$，$| ([1 - h(a)y]_+)^2 - ([1 - h(b)y]_+)^2 | = |([1 - h(b)y]_+)^2| \le |[h(a)y - h(b)y)]_+|^2 \le |h(a)y - h(b)y|^2 = |h(a)-h(b)||h(a)-h(b)|y^2 \le 2M|h(a) - h(b)| < 2(M+1)|h(a) - h(b)|$。
+
+若 $1 - h(b)y > 0$且$1 - h(a)y > 0$，则$h(a)y \ge 1$，$| ([1 - h(a)y]_+)^2 - ([1 - h(b)y]_+)^2 | = | (1 - h(a)y)^2 - (1 - h(b)y)^2 | = | (1-h(a))^2 - (1 - h(b))^2 | = |2 - h(a) - h(b)||h(b)-h(a)| \le (2 + M + M)|h(a) - h(b)| = 2(M+1)|h(a) - h(b)|$。
+
+综上所述，损失函数$\ell$对于假设空间$\mathcal{H}$是$\sigma$-可容许的，其中$\sigma=2M+2$。
+然后由slides上的命题6.1知SVMs具有$\gamma$-稳定性，$\gamma < \frac{4(M+1)^2r^2}{m\lambda}$，所以$\ell(\mathcal{L, D}) \le \hat{\ell}(\mathcal{L}, D) + \gamma + (2m\gamma + (M+1)^2) \sqrt{\frac{\ln 1/\delta}{2m}} < \hat{\ell}(\mathcal{L}, D) + \frac{4(M+1)^2r^2}{m\lambda} + (\frac{8(M+1)^2r^2}{\lambda} + (M+1)^2) \sqrt{\frac{\ln 1/\delta}{2m}}$，以至少$1 - \delta$的概率成立。
 		
 
 	~\\
