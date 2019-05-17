@@ -62,8 +62,7 @@
 \newtheorem*{myAnalysis}{Analysis}
 \newtheorem*{myProof}{Proof}
 \newtheorem*{myRemark}{备注}
-\renewcommand{\tilde}{\mathbf{w}idetilde}
-\renewcommand{\hat}{\mathbf{w}idehat}
+
 \newcommand{\indep}{\rotatebox[origin=c]{90}{$\models$}}
 \newcommand*\diff{\mathop{}\!\mathrm{d}}
 
@@ -73,9 +72,11 @@
 
 %--
 \begin{document}
+\renewcommand{\tilde}{\mathbf{w}idetilde}
+\renewcommand{\hat}{\mathbf{w}idehat}
 	\title{机器学习理论导引\\
 		作业四}
-	\author{姓名，邮箱}
+	\author{DZ1833019,欧先飞,ouxianfei@smail.nju.edu.cn}
 	\maketitle
 	
 	% \section*{作业提交注意事项}
@@ -96,9 +97,33 @@
 \]
 	
 \begin{myProof}~\\
-	~\\
-	~\\
-	~\\
+
+首先由定义有：
+\begin{eqnarray*}
+	f^*(y) = \sup_{y \in dom(f^*)} (yx - f(x)) = \sup_{y \in dom(f^*)} (yx - \ln(1 + e^{-x}))
+\end{eqnarray*}
+
+令$g(x) = yx - \ln(1 + e^{-x})$，对其求导则有$g'(x) = y + \frac{e^{-x}}{1 + e^{-x}} = y + \frac{1}{1 + e^x}$，容易发现在整个定义域内，$g'(x)$呈上升趋势且$g'(x) > y$恒成立，以下对$y$的取值范围进行讨论。
+
+$(1)$ 当$y \ge 0$时，$g(x)$在$(-\infty, +\infty)$内单调递增，则$f^*(y) = \sup g(x) = \lim_{x \rightarrow +\infty} (yx - \ln(1 + e^{-x})) = 0$。
+
+$(2)$ 当$-1 < y < 0$时，$g'(x)$在定义域内存在零点$\ln(-1 - \frac{1}{y})$，亦即$g(x)$在$x=\ln(-1 - \frac{1}{y})$时达到最值，故$f^*(y) = \sup g(x) = g(\ln(-1 - \frac{1}{y})) = y \ln(-1 - \frac{1}{y}) - \ln \left( 1 + e^{-\ln(-1 - \frac{1}{y})} \right) = y \ln(-1 - \frac{1}{y}) - \ln \left( \frac{1}{y+1} \right)$。
+
+$(3)$ 当$y = -1$时，$g'(x) < 0$在$(-\infty, +\infty)$内恒成立，所以$\sup g(x) = \lim_{x \rightarrow -\infty} ( yx - \ln(1 + e^{-x}) ) = \lim_{x \rightarrow -\infty} \ln \frac{e^{(y+1)x}}{1+e^x} = 0$。
+
+$(4)$ 当$y < -1$时，$\lim_{x \rightarrow -\infty} ( yx - \ln(1 + e^{-x}) ) = +\infty$，所以$\sup g(x)$不存在，此时$f^*(y)$无定义。
+
+综上所述
+\begin{eqnarray*}
+f^*(y) = \left\{
+\begin{aligned}
+	0 &,& y \ge 0 \\
+	y \ln(-1 - \frac{1}{y}) - \ln \left( \frac{1}{y+1} \right) &,& -1 < y < 0 \\
+	0 &,& y = -1 \\
+\end{aligned}
+\right.
+\end{eqnarray*}
+
 	~\\	
 	\qed
 \end{myProof}
@@ -111,6 +136,12 @@
 \]
 
 \begin{myProof}~\\
+首先简记$\Pi_{\mathcal{W}}(\mathbf{x})$为$\mathbf{x}_\mathcal{W}$，由于$\mathcal{W}$是凸包，所以有$\forall \mathbf{x} \forall \mathbf{y}  (\mathbf{y} - \mathbf{x}_\mathcal{W})^\mathrm{T}(\mathbf{x}-\mathbf{x}_\mathcal{W}) \le 0 $，以下对$\mathbf{x}$和$\mathbf{y}$的所处的位置进行讨论。
+~\\
+$(1)$ $\mathbf{x}$和$\mathbf{y}$均在图包$\mathcal{W}$范围内，则$\norm{\Pi_{\mathcal{W}}(\mathbf{x})-\Pi_{\mathcal{W}}(\mathbf{y})} = \norm{\mathbf{x} - \mathbf{y}}$
+
+$(2)$ 两点中有一点在
+由投影操作的定义有$\norm{\mathbf{x}-\mathbf{x}_\mathcal{W}} < $
 	~\\
 	~\\
 	~\\
