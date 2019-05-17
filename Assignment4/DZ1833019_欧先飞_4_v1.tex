@@ -1,0 +1,180 @@
+\documentclass[a4paper,UTF8]{article}
+\usepackage{ctex}
+\usepackage[margin=1.25in]{geometry}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{enumerate}
+\usepackage{bm}
+\usepackage{tcolorbox}
+\usepackage{hyperref}
+\usepackage{pgfplots}
+\usepackage{epsfig}
+\usepackage{color}
+\usepackage{mdframed}
+\usepackage{lipsum}
+% add the new command "\norm"
+\usepackage{mathtools}
+\let\oldnorm\norm   % <-- Store original \norm as \oldnorm
+\let\norm\undefined % <-- "Undefine" \norm
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
+\newmdtheoremenv{thm-box}{myThm}
+\newmdtheoremenv{prop-box}{Proposition}
+\newmdtheoremenv{def-box}{定义}
+
+\setlength{\evensidemargin}{.25in}
+\setlength{\textwidth}{6in}
+\setlength{\topmargin}{-0.5in}
+\setlength{\topmargin}{-0.5in}
+% \setlength{\textheight}{9.5in}
+%%%%%%%%%%%%%%%%%%此处用于设置页眉页脚%%%%%%%%%%%%%%%%%%
+\usepackage{fancyhdr}                                
+\usepackage{lastpage}                                           
+\usepackage{layout}                                             
+\footskip = 10pt 
+\pagestyle{fancy}                    % 设置页眉                 
+\lhead{2019年春季}                    
+\chead{机器学习理论导引}                                                
+% \rhead{第\thepage/\pageref{LastPage}页} 
+\rhead{作业四}                                                                                               
+\cfoot{\thepage}                                                
+\renewcommand{\headrulewidth}{1pt}  			%页眉线宽，设为0可以去页眉线
+\setlength{\skip\footins}{0.5cm}    			%脚注与正文的距离           
+\renewcommand{\footrulewidth}{0pt}  			%页脚线宽，设为0可以去页脚线
+
+\makeatletter 									%设置双线页眉                                        
+\def\headrule{{\if@fancyplain\let\headrulewidth\plainheadrulewidth\fi%
+		\hrule\@height 1.0pt \@width\headwidth\vskip1pt	%上面线为1pt粗  
+		\hrule\@height 0.5pt\@width\headwidth  			%下面0.5pt粗            
+		\vskip-2\headrulewidth\vskip-1pt}      			%两条线的距离1pt        
+	\vspace{6mm}}     								%双线与下面正文之间的垂直间距              
+\makeatother  
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\numberwithin{equation}{section}
+%\usepackage[thmmarks, amsmath, thref]{ntheorem}
+\newtheorem{theorem}{Theorem}
+\newtheorem*{myDef}{Definition}
+\newtheorem*{mySol}{Solution}
+\newtheorem*{myAnalysis}{Analysis}
+\newtheorem*{myProof}{Proof}
+\newtheorem*{myRemark}{备注}
+\renewcommand{\tilde}{\mathbf{w}idetilde}
+\renewcommand{\hat}{\mathbf{w}idehat}
+\newcommand{\indep}{\rotatebox[origin=c]{90}{$\models$}}
+\newcommand*\diff{\mathop{}\!\mathrm{d}}
+
+\usepackage{multirow}
+
+%--
+
+%--
+\begin{document}
+	\title{机器学习理论导引\\
+		作业四}
+	\author{姓名，邮箱}
+	\maketitle
+	
+	% \section*{作业提交注意事项}
+	% \begin{tcolorbox}
+	% 	\begin{enumerate}
+	% 		\item[(1)] 请严格参照课程网站作业提交方法一节提交作业，未按照要求提交作业，或提交作业格式不正确，将会被扣除部分作业分数；
+	% 		\item[(2)] 截止时间后不接收作业，本次作业记零分；
+	% 		\item[(3)] 本课程要求大家遵守学术诚信，请关注课程主页的详细说明。
+	% 	\end{enumerate}
+	% \end{tcolorbox}
+	
+	% \newpage
+
+\section{[15pts] Conjugate Functions}
+\noindent 推导下面函数的共轭函数
+\[
+	f(x)=\log(1+\exp(-x)).
+\]
+	
+\begin{myProof}~\\
+	~\\
+	~\\
+	~\\
+	~\\	
+	\qed
+\end{myProof}
+
+\newpage
+\section{[15pts] Projection}
+\noindent 对于凸集$\mathcal{W}$，试证明投影操作$\Pi_{\mathcal{W}}(\cdot)$是不扩展的，即
+\[
+\norm{\Pi_{\mathcal{W}}(\mathbf{x})-\Pi_{\mathcal{W}}(\mathbf{y})} \leq \norm{\mathbf{x} - \mathbf{y}}, \ \forall \mathbf{x}, \mathbf{y}.
+\]
+
+\begin{myProof}~\\
+	~\\
+	~\\
+	~\\
+	~\\	
+	\qed
+\end{myProof}
+
+\newpage
+\section{[20pts] Gradient Descent with Decaying Step Size}
+\noindent 分析采用衰减步长时梯度下降（GD）的收敛速率。具体而言，考虑
+\[
+\eta_t=O\left(\frac{1}{\sqrt{t}}\right)
+\]
+
+\begin{myAnalysis}~\\
+	~\\
+	~\\
+	~\\
+	~\\	
+	~\\
+\end{myAnalysis}
+
+
+\newpage
+\section{[50pts] Stochastic Optimization}
+\noindent 考虑随机优化问题
+\[
+\min_{\mathbf{w} \in \mathcal{W}} \ F(\mathbf{w})= \mathbb{E}_{\xi} \left[ f(\mathbf{w}, \xi) \right]
+\]
+其中目标函数是$\lambda$强凸的，也就是
+\begin{equation}\label{eqn:strong}
+F(\mathbf{w}) + \langle \nabla F(\mathbf{w}), \mathbf{w}'-\mathbf{w}  \rangle + \frac{\lambda}{2} \|\mathbf{w}'-\mathbf{w}\|_2^2 \leq F(\mathbf{w}'), \ \forall \mathbf{w}, \mathbf{w}' \in \mathcal{W}.
+\end{equation}
+试分析采用$\eta_t=O(1/[\lambda t])$的随机梯度下降算法的额外风险。
+\begin{enumerate}
+  \item[(1)] \textbf{[25pts]} 证明期望意义上的额外风险为$O(\log T/T)$。\\
+  提示：该问题非常简单，可以将步长设置为$\eta_t=1/[\lambda t]$。然后，参考[1]中定理1的证明，得到
+\[
+ \sum_{t=1}^T F(\mathbf{w}_{t}) - T F(\mathbf{w}) \leq \frac{G^2}{2 \lambda} (\log T+1) + \sum_{t=1}^T \langle \nabla F(\mathbf{w}_t)-\mathbf{g}_t, \mathbf{w}_t - \mathbf{w} \rangle.
+\]
+接下来只需要求期望，化简即可。
+  \item[(2)] \textbf{[25pts]} 证明$O(\log T/T)$的收敛速率同样以大概率成立。\\
+第一种途径：可以将步长设置为$\eta_t=2/[\lambda t])$。然后，参考[1]中定义1的证明，得到
+\[
+ \sum_{t=1}^T F(\mathbf{w}_{t}) - T F(\mathbf{w}) \leq    \frac{G^2}{\lambda}(\log T+1) +\sum_{t=1}^T \langle \nabla F(\mathbf{w}_t)-\mathbf{g}_t, \mathbf{w}_t - \mathbf{w} \rangle- \frac{\lambda}{4} \sum_{t=1}^T \|\mathbf{w}_t - \mathbf{w}\|^2.
+\]
+参考讲义公式(21)的推导过程，我们知道以至少$1-\delta$的概率
+ \[
+ \sum_{t=1}^T \langle \nabla F(\mathbf{w}_t)-\mathbf{g}_t, \mathbf{w}_t - \mathbf{w} \rangle \leq  2\sqrt{ 4 G^2  \log \frac{m }{\delta} \left( \sum_{t=1}^T \|\mathbf{w}_t - \mathbf{w}\|^2\right)} +  \frac{8G^2}{3\lambda}   \log \frac{m }{\delta} + \frac{4G^2}{\lambda} .
+\]
+最后对结果化简即可。\\
+第二种途径：参考论文[2]。
+\end{enumerate}
+\begin{myProof}~\\
+	~\\
+	~\\
+	~\\
+	~\\	
+	\qed
+\end{myProof}
+\newpage
+\section*{Reference}
+\begin{enumerate}[ {[}1{]}]
+\item E. Hazan, A. Agarwal, and S. Kale. Logarithmic regret algorithms for online convex optimization. \textit{Machine Learning}, 69(2-3):169-192, 2007.
+\item S. M. Kakade and A. Tewari. On the generalization ability of online strongly convex programming algorithms. In \textit{Advances in Neural Information Processing Systems 21}, pages 801-808, 2009.
+\end{enumerate}
+\end{document}
