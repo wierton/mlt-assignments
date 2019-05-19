@@ -26,7 +26,7 @@
 % \setlength{\textheight}{9.5in}
 %%%%%%%%%%%%%%%%%%此处用于设置页眉页脚%%%%%%%%%%%%%%%%%%
 \usepackage{fancyhdr}                                
-\usepackage{lastpage}                                           
+\usepackage{lastpage}                                     \usepackage{cite}
 \usepackage{layout}                                             
 \footskip = 10pt 
 \pagestyle{fancy}                    % 设置页眉                 
@@ -70,7 +70,7 @@
 \renewcommand{\hat}{\widehat}
 	\title{机器学习理论导引\\
 		作业三}
-	\author{欧先飞，ouxianfei@smail.nju.edu.cn}
+	\author{欧先飞，DZ1833019，ouxianfei@smail.nju.edu.cn}
 	\maketitle
 
 \section{[20pts] Concentration Inequalities}
@@ -100,7 +100,7 @@ $(1)$ $X \sim N(\mu, \sigma^2) \Longrightarrow \sum_{i=1}^m X_i \sim N(m\mu, m\s
 &=& \exp(- \frac{\epsilon^2}{2\sigma_0^2}) = \exp(- \frac{m\epsilon^2}{2\sigma^2}) \\
 \end{eqnarray*}
 ~\\
-$(2)$ $\Pr(\bar{X_n} \ge \mu + \epsilon) \ge \exp(- \frac{n \epsilon^2}{2V + 2b\epsilon}) = \delta  \Longrightarrow \epsilon = \frac{1}{n}(\sqrt{b^2\ln^2\delta - nV\ln\delta} - b \ln\delta)$，所以$\Pr(\bar{X_n} \ge \mu + \frac{\sqrt{b^2\ln^2\delta - nV\ln\delta} - b \ln \delta}{n}) \le \delta$。
+$(2)$ $\Pr(\bar{X_n} \ge \mu + \epsilon) \le \exp(- \frac{n \epsilon^2}{2V + 2b\epsilon}) = \delta  \Longrightarrow \epsilon = \frac{1}{n}(\sqrt{b^2\ln^2\delta - 2nV\ln\delta} - b \ln\delta)$，所以$\Pr(\bar{X_n} \ge \mu + \frac{\sqrt{b^2\ln^2\delta - 2nV\ln\delta} - b \ln \delta}{n}) \le \delta$。
 
 ~\\
 $(3)$ 令$Y = X - \mu \in [\alpha - \mu, \beta - \mu]$，其中$\mu = E(X)$，记$a = \alpha - \mu$， $b = \beta - \mu$，则$Y \in [a, b]$。令$Z = \frac{Y-a}{b-a}$，则$Y = (b-a)Z + a = Zb + (1 - Z)a$。因为$Z = \frac{Y-a}{b-a} \in [0, 1]$，由Jensen不等式有$e^{\lambda Y} = e^{Z \lambda b + (1-Z) \lambda a} \le Z e^{\lambda b} + (1-Z)e^{\lambda a}$。对不等式两边求取一下期望：
@@ -150,7 +150,7 @@ h(x) &=& h(0) + xh'(0) + \frac{x^2}{2} h''(\xi) \\
 	\]
 \end{thm-box}
 	请写出详细的证明过程。
-	\begin{myProof}~\\
+	\begin{myProof}slides中的证明跳了一些步骤我没能补齐，这里的证明方法参考自一篇stack exchange上的回答\cite{21513}。~\\
 
 记$f(X_{1:m}) = f(X_1, \ldots, X_m)$。令$V_i = \mathbb{E}[f(X_{1:m}) | X_1, \ldots, X_i] - \mathbb{E}[f(X_{1:m}) | X_1, \ldots, X_{i-1}],\,1 < i \le m$，对于边界情况有$V_1 = \mathbb{E}[f(X_{1:m}) | X_1] - \mathbb{E}[f(X_{1:m})]$，易见$f(X_{1:m}) - \mathbb{E}[f(X_{1:m})] = \sum_{i=1}^m V_i$。
 由马尔科夫不等式有：
@@ -170,10 +170,10 @@ L_i &= \inf V_i &= \inf_v ( \mathbb{E}[f(X_{1:m}|X_1, \ldots, X_{i-1}, v) ] - \m
 
 对两者逐差有：
 \begin{eqnarray*}
-H_i - L_i &=& \sup_{u, v} (\mathbb{E}[f(X_{1:m}|X_1, \ldots, X_{i-1}, u) ] - \mathbb{E}[f(X_{1:m}|X_1, \ldots, X_{i-1}, v) ]) \\
-&=& \int_{-\infty}^{+\infty}\ldots\int_{-\infty}^{+\infty} f(x_1, \ldots, x_{i-1}, u, x_{i+1}, \ldots, x_m) f_{X_{i+1}}(x_{i+1}) \ldots f_{X_{m}}(x_m) d x_{i+1} \ldots d x_m \\
-&& - \int_{-\infty}^{+\infty}\ldots\int_{-\infty}^{+\infty} f(x_1, \ldots, x_{i-1}, v, x_{i+1}, \ldots, x_m) f_{X_{i+1}}(x_{i+1}) \ldots f_{X_{m}}(x_m) d x_{i+1} \ldots d x_m \\
-&=& \int_{-\infty}^{+\infty}\ldots\int_{-\infty}^{+\infty} (f(x_1, \ldots, x_{i-1}, u, x_{i+1}, \ldots, x_m) \\
+H_i - L_i &=& \sup_u\mathbb{E}[f(X_{1:m}|X_1, \ldots, X_{i-1}, u) ] - \inf_v\mathbb{E}[f(X_{1:m}|X_1, \ldots, X_{i-1}, v) ]) \\
+&=& \int_{-\infty}^{+\infty}\ldots\int_{-\infty}^{+\infty} \sup_u f(x_1, \ldots, x_{i-1}, u, x_{i+1}, \ldots, x_m) f_{X_{i+1}}(x_{i+1}) \ldots f_{X_{m}}(x_m) d x_{i+1} \ldots d x_m \\
+&& - \int_{-\infty}^{+\infty}\ldots\int_{-\infty}^{+\infty} \inf_v f(x_1, \ldots, x_{i-1}, v, x_{i+1}, \ldots, x_m) f_{X_{i+1}}(x_{i+1}) \ldots f_{X_{m}}(x_m) d x_{i+1} \ldots d x_m \\
+&=& \int_{-\infty}^{+\infty}\ldots\int_{-\infty}^{+\infty} \sup_{u,v} (f(x_1, \ldots, x_{i-1}, u, x_{i+1}, \ldots, x_m) \\
 && - f(x_1, \ldots, x_{i-1}, v, x_{i+1}, \ldots, x_m) ) f_{X_{i+1}}(x_{i+1}) \ldots f_{X_{m}}(x_m) d x_{i+1} \ldots d x_m \\
 &\le& \int_{-\infty}^{+\infty}\ldots\int_{-\infty}^{+\infty} c_i f_{X_{i+1}}(x_{i+1}) \ldots f_{X_{m}}(x_m) d x_{i+1} \ldots d x_m \\
 &=& c_i
@@ -284,5 +284,6 @@ $(2)$令$\mu = \mathbb{E}(T_n)$，
 	\qed
 \end{myProof}
 \newpage
-
+\bibliographystyle{plain}
+\bibliography{refer}
 \end{document}
