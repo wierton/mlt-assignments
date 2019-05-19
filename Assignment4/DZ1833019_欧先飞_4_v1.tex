@@ -285,20 +285,28 @@ F(\mathbf{w}_t) - F(\mathbf{w})
 将上述不等式从$t=1$加到$T$有：
 \begin{eqnarray*}
 \sum_{t=1}^T F(\mathbf{w}_t) - TF(\mathbf{w}) &\le& \sum_{t=1}^T \left( \frac{1}{2\eta_t} \left[ \norm{\mathbf{w}_t - \mathbf{w}}_2^2 - \norm{\mathbf{w}_{t+1} - \mathbf{w}}_2^2 \right] + \frac{\eta_t}{2} G^2 - \frac{\lambda}{2} \norm{\mathbf{w} - \mathbf{w}_t}_2^2 + \epsilon_t \right) \\
-&=& \sum_{t=1}^T \left( \frac{1}{2\eta_t} - \frac{1}{2\eta_{t-1}} - \frac{\lambda}{2} \right) \norm{\mathbf{w}_t - \mathbf{w}}_2^2 + \left( \frac{1}{2\eta_1} - \frac{\lambda}{2} \right) \norm{\mathbf{w}_1 - \mathbf{w}}_2^2 \\
+&=& \sum_{t=2}^T \left( \frac{1}{2\eta_t} - \frac{1}{2\eta_{t-1}} - \frac{\lambda}{2} \right) \norm{\mathbf{w}_t - \mathbf{w}}_2^2 + \left( \frac{1}{2\eta_1} - \frac{\lambda}{2} \right) \norm{\mathbf{w}_1 - \mathbf{w}}_2^2 \\
 && - \frac{1}{2\eta_{T+1}}\norm{\mathbf{w}_{T+1} - \mathbf{w}}_2^2 + \sum_{t=1}^T \frac{\eta_t}{2} G^2 + \sum_{t=1}^T \epsilon_t \\
-&=&  \sum_{t=1}^T \left( \frac{\lambda t}{2} - \frac{\lambda (t-1)}{2} - \frac{\lambda}{2} \right) \norm{\mathbf{w}_t - \mathbf{w}}_2^2 + \left( \frac{\lambda}{2} - \frac{\lambda}{2} \right) \norm{\mathbf{w}_1 - \mathbf{w}}_2^2 \\
+&=&  \sum_{t=2}^T \left( \frac{\lambda t}{2} - \frac{\lambda (t-1)}{2} - \frac{\lambda}{2} \right) \norm{\mathbf{w}_t - \mathbf{w}}_2^2 + \left( \frac{\lambda}{2} - \frac{\lambda}{2} \right) \norm{\mathbf{w}_1 - \mathbf{w}}_2^2 \\
 && - \frac{1}{2\eta_{T+1}}\norm{\mathbf{w}_{T+1} - \mathbf{w}}_2^2 + \sum_{t=1}^T \frac{1}{2\lambda t} G^2 + \sum_{t=1}^T \epsilon_t \\
 &\le& \sum_{t=1}^T \frac{1}{2\lambda t} G^2 + \sum_{t=1}^T \epsilon_t < \frac{1 + \ln T}{2\lambda} G^2 + \sum_{t=1}^T \epsilon_t
 \end{eqnarray*}
 
 再由Jensen不等式可以得到$F(\overline{\mathbf{w}}_T) - F(\mathbf{w}) \le \frac{1}{T}\sum_{t=1}^T F(\mathbf{w}_t) - F(\mathbf{w}) \le \frac{1 + \ln T}{2\lambda T} G^2 + \frac{1}{T}\sum_{t=1}^T \epsilon_t$，又因为$\mathbb{E}[f(\mathbf{w}_t, \xi_t)] = F(\mathbf{w}_t)$，所以$\mathbb{E}[\epsilon_t] = \mathbb{E}[\langle \nabla F(\mathbf{w}_t) - f(\mathbf{w}_t, \xi_t) , \mathbf{w}_t - \mathbf{w} \rangle] = 0$。最后对上述不等式两边求期望即可得到$\mathbb{E}[F(\overline{\mathbf{w}}_T)] - F(\mathbf{w}) \le \frac{1 + \ln T}{2\lambda T} G^2 = O(\frac{\ln T}{T})$。
 
-$(2)$ 
+$(2)$ 令$\eta_t = \frac{2}{\lambda t}$，则由$(1)$的推导可得
+\begin{eqnarray*}
+\sum_{t=1}^T F(\mathbf{w}_t) - TF(\mathbf{w}) &\le& \sum_{t=1}^T \left( \frac{1}{2\eta_t} - \frac{1}{2\eta_{t-1}} - \frac{\lambda}{2} \right) \norm{\mathbf{w}_t - \mathbf{w}}_2^2 + \left( \frac{1}{2\eta_1} - \frac{\lambda}{2} \right) \norm{\mathbf{w}_1 - \mathbf{w}}_2^2 \\
+&& - \frac{1}{2\eta_{T+1}}\norm{\mathbf{w}_{T+1} - \mathbf{w}}_2^2 + \sum_{t=1}^T \frac{\eta_t}{2} G^2 + \sum_{t=1}^T \epsilon_t \\
+&=& \sum_{t=2}^T \left( \frac{\lambda t}{4} - \frac{\lambda (t-1)}{4} - \frac{\lambda}{2} \right) \norm{\mathbf{w}_t - \mathbf{w}}_2^2 + \left( \frac{\lambda}{4} - \frac{\lambda}{2} \right) \norm{\mathbf{w}_1 - \mathbf{w}}_2^2 \\
+&& - \frac{1}{2\eta_{T+1}}\norm{\mathbf{w}_{T+1} - \mathbf{w}}_2^2 + \sum_{t=1}^T \frac{1}{\lambda t} G^2 + \sum_{t=1}^T \epsilon_t \\
+&\le& \frac{1 + \ln T}{\lambda}G^2 + \sum_{t=1}^T \epsilon_t - \sum_{t=1}^T \norm{\mathbf{w}_t - \mathbf{w}}_2^2 - \frac{1}{2\eta_{T+1}}\norm{\mathbf{w}_{T+1}}_2^2 \\
+&\le& \frac{1 + \ln T}{\lambda}G^2 + \sum_{t=1}^T \epsilon_t \\
+\Longrightarrow \frac{1}{T}\sum_{t=1}^T F(\mathbf{w}_t) - F(\mathbf{w}) &\le& \frac{1 + \ln T}{\lambda T}G^2 + \frac{1}{T}\sum_{t=1}^T \epsilon_t
+\end{eqnarray*}
 
-	~\\
-	~\\
-	~\\
+记$M(\lambda, \frac{1}{\delta}, m) = 2\sqrt{ 4 G^2  \log \frac{m }{\delta} \left( \sum_{t=1}^T \|\mathbf{w}_t - \mathbf{w}\|^2\right)} +  \frac{8G^2}{3\lambda}   \log \frac{m }{\delta} + \frac{4G^2}{\lambda}$，由题目中slides的结论知$\sum_{t=1}^T \epsilon_t \le M(\lambda, \frac{1}{\delta}, m)$以至少$1-\delta$的概率成立，所以$\frac{1}{T}\sum_{t=1}^T F(\mathbf{w}_t) - F(\mathbf{w}) \le \frac{1 + \ln T}{\lambda T}G^2 + \frac{1}{T} M(\lambda, \frac{1}{\delta}, m) = O(\frac{\ln T}{T})$也以至少$1-\delta$的概率成立，再代一步Jensen不等式即可得到$\Pr [ F(\overline{\mathbf{w}}_t) - F(\mathbf{w}) \le \frac{1 + \ln T}{\lambda T}G^2 + \frac{1}{T} M(\lambda, \frac{1}{\delta}, m)] \ge 1 - \delta$，所以$O(\frac{\ln T}{T})$的收敛速率同样以大概率成立。
+
 	~\\	
 	\qed
 \end{myProof}
