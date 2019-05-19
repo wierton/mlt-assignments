@@ -266,27 +266,35 @@ F(\mathbf{w}) + \langle \nabla F(\mathbf{w}), \mathbf{w}'-\mathbf{w}  \rangle + 
 第二种途径：参考论文[2]。
 \end{enumerate}
 \begin{myProof}~\\
-$(1)$设最优值为$w$，参考$[1]$中定理$1$的证明方法，首先由$\lambda$强凸的条件有$f(w, \xi_t) \ge f(w_t, \xi_t) + \langle \nabla f(w_t, \xi_t), w - w_t \rangle + \frac{\lambda}{2}\norm{w - w_t}_2^2$，换项可得$f(w_t, \xi_t) - f(w, \xi_t) \le \langle \nabla f(w_t, \xi_t), w_t - w \rangle - \frac{\lambda}{2}\norm{w - w_t}_2^2$，对$\langle \nabla f(w_t, \xi_t), w_t - w  \rangle$估算上界：
+$(1)$设最优值为$\mathbf{w}$，由$\lambda$强凸的性质可以知道：
 \begin{eqnarray*}
-\norm{w - w_{t+1}}_2^2 &=& \norm{w - \Pi_\mathcal{W}(w_t - \eta_t \nabla f(w_t, \xi_t))}_2^2 \\
-&\le& \norm{w - w_t + \eta_t\nabla f(w_t, \xi_t)}_2^2 \\
-&=& \norm{w - w_t}_2^2 + \eta_t^2\norm{\nabla f(w_t, \xi_t)}_2^2 + 2 \eta_t \langle \nabla f(w_t, \xi_t), w - w_t  \rangle \\
-\Longrightarrow \langle \nabla f(w_t, \xi_t), w_t - w  \rangle &\le& \frac{1}{2\eta_t} \left( \norm{w - w_t}_2^2  - \norm{w - w_{t+1}}_2^2 \right) + \frac{\eta_t}{2}\norm{\nabla f(w_t, \xi_t)}_2^2
+F(\mathbf{w}_t) - F(\mathbf{w}) &\le& \langle \nabla F(\mathbf{w}_t), \mathbf{w}_t - \mathbf{w} \rangle - \frac{\lambda}{2} \norm{\mathbf{w} - \mathbf{w}_t}_2^2 \\
+&=& \langle \nabla f(\mathbf{w}_t, \xi_t), \mathbf{w}_t - \mathbf{w} \rangle + \langle \nabla F(\mathbf{w}_t) - f(\mathbf{w}_t, \xi_t) , \mathbf{w}_t - \mathbf{w} \rangle  - \frac{\lambda}{2} \norm{\mathbf{w} - \mathbf{w}_t}_2^2
 \end{eqnarray*}
-再对$f(w_t, \xi_t) - f(w, \xi_t) \le \langle \nabla f(w_t, \xi_t), w_t - w \rangle - \frac{\lambda}{2}\norm{w - w_t}_2^2$左右从$1$到$t$进行求和：
+记$\epsilon_t = \langle \nabla F(\mathbf{w}_t) - f(\mathbf{w}_t, \xi_t) , \mathbf{w}_t - \mathbf{w} \rangle$进而有：
 \begin{eqnarray*}
-\sum_{t=1}^T [f(w_t, \xi_t) - f(w, \xi_t)] &\le& \langle \nabla f(w_t, \xi_t), w_t - w \rangle - \frac{\lambda}{2}\norm{w - w_t}_2^2 \\
-&\le& \sum_{t=1}^T \frac{1}{2\eta_t} \left( \norm{w - w_t}_2^2  - \norm{w - w_{t+1}}_2^2 \right) + \frac{\eta_t}{2}\norm{\nabla f(w_t, \xi_t)}_2^2 - \frac{\lambda}{2}\norm{w - w_t}_2^2 \\
-&=& \sum_{t=2}^T (\frac{1}{2\eta_t} - \frac{1}{2\eta_{t-1}} - \frac{\lambda}{2}) \norm{w - w_t}_2^2 + (\frac{1}{2\eta_1} - \frac{\lambda}{2}) \norm{w - w_1}_2^2 \\
-&& - \frac{1}{2\eta_{T+1}}\norm{w - w_{T+1}}_2^2 + \sum_{t=1}^T \frac{\eta_t}{2} \norm{\nabla f(w_t, \xi_t)}_2^2 \\
-&=& \sum_{t=2}^T (\frac{\lambda t}{2} - \frac{\lambda(t-1)}{2} - \frac{\lambda}{2}) \norm{w - w_t}_2^2 + (\frac{\lambda}{2} - \frac{\lambda}{2}) \norm{w - w_1}_2^2 \\
-&& - \frac{\lambda (T+1)}{2}\norm{w - w_{T+1}}_2^2 + \sum_{t=1}^T \frac{1}{2\lambda t} \norm{\nabla f(w_t, \xi_t)}_2^2 \\
-&=& - \frac{\lambda (T+1)}{2}\norm{w - w_{T+1}}_2^2 + \sum_{t=1}^T \frac{1}{2\lambda t} \norm{\nabla f(w_t, \xi_t)}_2^2 \\
-&\le& \sum_{t=1}^T \frac{1}{2\lambda t} \norm{\nabla f(w_t, \xi_t)}_2^2 \\
-&\le& \sum_{t=1}^T \frac{1}{2\lambda t} G^2 < \frac{1 + \ln T}{2\lambda} G^2
+F(\mathbf{w}_t) - F(\mathbf{w})
+&\le& \langle \nabla f(\mathbf{w}_t, \xi_t), \mathbf{w}_t - \mathbf{w} \rangle   - \frac{\lambda}{2} \norm{\mathbf{w} - \mathbf{w}_t}_2^2 + \epsilon_t \\
+&=& \frac{1}{\eta_t} \langle \mathbf{w}_t - \mathbf{w}_{t+1}', \mathbf{w}_t - \mathbf{w} \rangle - \frac{\lambda}{2} \norm{\mathbf{w} - \mathbf{w}_t}_2^2 + \epsilon_t \\
+&=& \frac{1}{2\eta_t} \left[ \norm{\mathbf{w}_t - \mathbf{w}_{t+1}'}_2^2 + \norm{\mathbf{w}_t - \mathbf{w}}_2^2 - \norm{\mathbf{w}_{t+1}' - \mathbf{w}}_2^2 \right] - \frac{\lambda}{2} \norm{\mathbf{w} - \mathbf{w}_t}_2^2 + \epsilon_t \\
+&=& \frac{1}{2\eta_t} \left[ \norm{\mathbf{w}_t - \mathbf{w}}_2^2 - \norm{\mathbf{w}_{t+1}' - \mathbf{w}}_2^2 \right] + \frac{1}{2\eta_t} \norm{\mathbf{w}_t - \mathbf{w}_{t+1}'}_2^2 - \frac{\lambda}{2} \norm{\mathbf{w} - \mathbf{w}_t}_2^2 + \epsilon_t \\
+&=& \frac{1}{2\eta_t} \left[ \norm{\mathbf{w}_t - \mathbf{w}}_2^2 - \norm{\mathbf{w}_{t+1}' - \mathbf{w}}_2^2 \right] + \frac{\eta_t}{2} \norm{\nabla F(\mathbf{w}_t)}_2^2 - \frac{\lambda}{2} \norm{\mathbf{w} - \mathbf{w}_t}_2^2 + \epsilon_t \\
+&\le& \frac{1}{2\eta_t} \left[ \norm{\mathbf{w}_t - \mathbf{w}}_2^2 - \norm{\mathbf{w}_{t+1} - \mathbf{w}}_2^2 \right] + \frac{\eta_t}{2} G^2 - \frac{\lambda}{2} \norm{\mathbf{w} - \mathbf{w}_t}_2^2 + \epsilon_t
 \end{eqnarray*}
 
-对不等式两边求期望则有$\left(\sum_{t=1}^T F(w_t)\right) - T F(w) < \frac{1 + \ln T}{2\lambda}G^2$，再由凸函数性质便有$$
+将上述不等式从$t=1$加到$T$有：
+\begin{eqnarray*}
+\sum_{t=1}^T F(\mathbf{w}_t) - TF(\mathbf{w}) &\le& \sum_{t=1}^T \left( \frac{1}{2\eta_t} \left[ \norm{\mathbf{w}_t - \mathbf{w}}_2^2 - \norm{\mathbf{w}_{t+1} - \mathbf{w}}_2^2 \right] + \frac{\eta_t}{2} G^2 - \frac{\lambda}{2} \norm{\mathbf{w} - \mathbf{w}_t}_2^2 + \epsilon_t \right) \\
+&=& \sum_{t=1}^T \left( \frac{1}{2\eta_t} - \frac{1}{2\eta_{t-1}} - \frac{\lambda}{2} \right) \norm{\mathbf{w}_t - \mathbf{w}}_2^2 + \left( \frac{1}{2\eta_1} - \frac{\lambda}{2} \right) \norm{\mathbf{w}_1 - \mathbf{w}}_2^2 \\
+&& - \frac{1}{2\eta_{T+1}}\norm{\mathbf{w}_{T+1} - \mathbf{w}}_2^2 + \sum_{t=1}^T \frac{\eta_t}{2} G^2 + \sum_{t=1}^T \epsilon_t \\
+&=&  \sum_{t=1}^T \left( \frac{\lambda t}{2} - \frac{\lambda (t-1)}{2} - \frac{\lambda}{2} \right) \norm{\mathbf{w}_t - \mathbf{w}}_2^2 + \left( \frac{\lambda}{2} - \frac{\lambda}{2} \right) \norm{\mathbf{w}_1 - \mathbf{w}}_2^2 \\
+&& - \frac{1}{2\eta_{T+1}}\norm{\mathbf{w}_{T+1} - \mathbf{w}}_2^2 + \sum_{t=1}^T \frac{1}{2\lambda t} G^2 + \sum_{t=1}^T \epsilon_t \\
+&\le& \sum_{t=1}^T \frac{1}{2\lambda t} G^2 + \sum_{t=1}^T \epsilon_t < \frac{1 + \ln T}{2\lambda} G^2 + \sum_{t=1}^T \epsilon_t
+\end{eqnarray*}
+
+再由Jensen不等式可以得到$F(\overline{\mathbf{w}}_T) - F(\mathbf{w}) \le \frac{1}{T}\sum_{t=1}^T F(\mathbf{w}_t) - F(\mathbf{w}) \le \frac{1 + \ln T}{2\lambda T} G^2 + \frac{1}{T}\sum_{t=1}^T \epsilon_t$，又因为$\mathbb{E}[f(\mathbf{w}_t, \xi_t)] = F(\mathbf{w}_t)$，所以$\mathbb{E}[\epsilon_t] = \mathbb{E}[\langle \nabla F(\mathbf{w}_t) - f(\mathbf{w}_t, \xi_t) , \mathbf{w}_t - \mathbf{w} \rangle] = 0$。最后对上述不等式两边求期望即可得到$\mathbb{E}[F(\overline{\mathbf{w}}_T)] - F(\mathbf{w}) \le \frac{1 + \ln T}{2\lambda T} G^2 = O(\frac{\ln T}{T})$。
+
+$(2)$ 
 
 	~\\
 	~\\
