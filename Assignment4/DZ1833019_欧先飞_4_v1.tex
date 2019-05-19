@@ -172,7 +172,7 @@ $(3)$两点均在$\mathcal{\mathcal{W}}$外，由凸包的性质，可以得到�
 (\mathbf{x}_\mathcal{W} - \mathbf{y}_\mathcal{W})^\mathrm{T}(\mathbf{y} - \mathbf{y}_\mathcal{W}) \le 0 \label{eq:z2}
 \end{gather}
 
-计算$\ref{eq:z1} + \ref{eq:z2}$可以得到：$(\mathbf{x}_\mathcal{W} - \mathbf{y}_\mathcal{W})^\mathrm{T}(\mathbf{x}_\mathcal{W} - \mathbf{y}_\mathcal{W}) < (\mathbf{x}_\mathcal{W} - \mathbf{y}_\mathcal{W})^\mathrm{T}(\mathbf{x} - \mathbf{y})$，而$(\mathbf{x}_\mathcal{W} - \mathbf{y}_\mathcal{W})^\mathrm{T}(\mathbf{x} - \mathbf{y}) = \norm{\mathbf{x}_\mathcal{W} - \mathbf{y}_\mathcal{W}}\norm{\mathbf{x}-\mathbf{y}} \cos (\mathbf{x}_\mathcal{W} - \mathbf{y}_\mathcal{W}, \mathbf{x} - \mathbf{y}) \le \norm{\mathbf{x}_\mathcal{W} - \mathbf{y}_\mathcal{W}}\norm{\mathbf{x} - \mathbf{y}}$，所以有$\norm{\mathbf{x}_\mathcal{W} - \mathbf{y}_\mathcal{W}}_2^2 < \norm {\mathbf{x}_\mathcal{W} - \mathbf{y}_\mathcal{W}}\norm{\mathbf{x} - \mathbf{y}}$，由于二范数的非负性，所以可以化简得到$\norm{\mathbf{x}_\mathcal{W} - \mathbf{y}_\mathcal{W}} \le \norm{\mathbf{x} - \mathbf{y}}$。
+计算$\ref{eq:z1} + \ref{eq:z2}$可以得到：$(\mathbf{x}_\mathcal{W} - \mathbf{y}_\mathcal{W})^\mathrm{T}(\mathbf{x}_\mathcal{W} - \mathbf{y}_\mathcal{W}) < (\mathbf{x}_\mathcal{W} - \mathbf{y}_\mathcal{W})^\mathrm{T}(\mathbf{x} - \mathbf{y})$，而$(\mathbf{x}_\mathcal{W} - \mathbf{y}_\mathcal{W})^\mathrm{T}(\mathbf{x} - \mathbf{y}) = \norm{\mathbf{x}_\mathcal{W} - \mathbf{y}_\mathcal{W}}\norm{\mathbf{x}-\mathbf{y}} \cos \langle \mathbf{x}_\mathcal{W} - \mathbf{y}_\mathcal{W}, \mathbf{x} - \mathbf{y} \rangle \le \norm{\mathbf{x}_\mathcal{W} - \mathbf{y}_\mathcal{W}}\norm{\mathbf{x} - \mathbf{y}}$，所以有$\norm{\mathbf{x}_\mathcal{W} - \mathbf{y}_\mathcal{W}}_2^2 < \norm {\mathbf{x}_\mathcal{W} - \mathbf{y}_\mathcal{W}}\norm{\mathbf{x} - \mathbf{y}}$，由于二范数的非负性，所以可以化简得到$\norm{\mathbf{x}_\mathcal{W} - \mathbf{y}_\mathcal{W}} \le \norm{\mathbf{x} - \mathbf{y}}$。
 
 ~\\
 结合$(1)$、$(2)$、$(3)$可知，命题$\norm{\mathbf{x}_\mathcal{W} - \mathbf{y}_\mathcal{W}} \le \norm{\mathbf{x} - \mathbf{y}}$成立。
@@ -193,7 +193,40 @@ $(3)$两点均在$\mathcal{\mathcal{W}}$外，由凸包的性质，可以得到�
 \begin{myAnalysis}~\\
 首先参考slides中的证明有：
 \begin{eqnarray*}
+f(w_t) - f(w) &\le& \nabla f(w_t) ^ T (w_t - w) \\
+&=& \frac{1}{\eta_t} \langle w_t - w_{t+1}', w_t - w \rangle \\
+&=& \frac{1}{2\eta_t} \left[ \norm{w_t - w_{t+1}'}_2^2 + \norm{w_t - w}_2^2 - \norm{w_{t+1}' - w}_2^2 \right] \\
+&=& \frac{1}{2\eta_t} \left[ \norm{w_t - w}_2^2 - \norm{w_{t+1}' - w}_2^2 \right] + \frac{1}{2\eta_t} \norm{w_t - w_{t+1}'}_2^2 \\
+&=& \frac{1}{2\eta_t} \left[ \norm{w_t - w}_2^2 - \norm{w_{t+1}' - w}_2^2 \right] + \frac{\eta_t}{2} \norm{\nabla f(w_t)}_2^2 \\
+&\le& \frac{1}{2\eta_t} \left[ \norm{w_t - w}_2^2 - \norm{w_{t+1} - w}_2^2 \right] + \frac{\eta_t}{2} G^2
 \end{eqnarray*}
+
+将上面得到的不等式从$t=1$加到T则有：
+\begin{eqnarray*}
+\sum_{t=1}^T \left[ f(w_t) - f(w) \right] &\le& \sum_{t=1}^T \frac{1}{2\eta_t} \norm{w_t - w}_2^2 - \sum_{t=1}^T \frac{1}{2\eta_t} \norm{w_{t+1} - w}_2^2 + \frac{1}{2} \sum_{t=1}^T \eta_t G^2 \\
+&=& \frac{1}{2\eta_1} \norm{w_1 - w}_2^2 + \sum_{t=1}^{T - 1} \left( \frac{1}{2\eta_{t+1}} - \frac{1}{2\eta_t} \right) \norm{w_{t+1} - w}_2^2 - \frac{1}{2\eta_T}\norm{w_{T+1} - w}_2^2 + \frac{1}{2} \sum_{t=1}^T \eta_t G^2
+\end{eqnarray*}
+
+由题意可设$\eta_t = \frac{1}{\sqrt{t}}$，则$\sum_{t=1}^T \frac{1}{\sqrt{t}} < 1 + \int_1^T \frac{1}{\sqrt{x}} dx = 1 + (2\sqrt{x})|_1^T = 2\sqrt{T} - 1$，代入上面的不等式则有：
+\begin{eqnarray*}
+\sum_{t=1}^T \left[ f(w_t) - f(w) \right] &\le& \frac{1}{2\eta_1} \norm{w_1 - w}_2^2 + \sum_{t=1}^{T - 1} \left( \frac{1}{2\eta_{t+1}} - \frac{1}{2\eta_t} \right) \norm{w_{t+1} - w}_2^2 - \frac{1}{2\eta_T}\norm{w_{T+1} - w}_2^2 + \frac{1}{2} \sum_{t=1}^T \eta_t G^2 \\
+&=& \frac{\norm{w_1 - w}_2^2}{2} + \sum_{t=1}^{T - 1} \left( \frac{\sqrt{t+1}}{2} - \frac{\sqrt{t}}{2} \right) \norm{w_{t+1} - w}_2^2 - \frac{\sqrt{T}}{2}\norm{w_{T+1} - w}_2^2 + \frac{2\sqrt{T} - 1}{2} G^2 \\
+&=& \frac{\norm{w_1 - w}_2^2}{2} + \sum_{t=1}^{T - 1} \frac{1}{2(\sqrt{t+1} + \sqrt{t})}  \norm{w_{t+1} - w}_2^2 - \frac{\sqrt{T}}{2}\norm{w_{T+1} - w}_2^2 + \frac{2\sqrt{T} - 1}{2} G^2 \\
+&<& \frac{\norm{w_1 - w}_2^2}{2} + \sum_{t=1}^{T - 1} \frac{1}{4\sqrt{t}}  \norm{w_{t+1} - w}_2^2 - \frac{\sqrt{T}}{2}\norm{w_{T+1} - w}_2^2 + \frac{2\sqrt{T} - 1}{2} G^2 \\
+&=& \frac{\norm{w_1 - w}_2^2}{2} + \frac{2\sqrt{T-1} -1}{4}  \norm{w_{t+1} - w}_2^2 - \frac{\sqrt{T}}{2}\norm{w_{T+1} - w}_2^2 + \frac{2\sqrt{T} - 1}{2} G^2
+\end{eqnarray*}
+
+参考slides中对定义域直径的假设，上述不等式可以继续化简为：
+\begin{eqnarray*}
+\sum_{t=1}^T \left[ f(w_t) - f(w) \right] &\le& \frac{\norm{w_1 - w}_2^2}{2} + \frac{2\sqrt{T-1} -1}{4}  \norm{w_{t+1} - w}_2^2 - \frac{\sqrt{T}}{2}\norm{w_{T+1} - w}_2^2 + \frac{2\sqrt{T} - 1}{2} G^2 \\
+&\le& \frac{D^2}{2} + \frac{2\sqrt{T-1} -1}{4}  D^2 - \frac{\sqrt{T}}{2}D^2 + \frac{2\sqrt{T} - 1}{2} G^2 \\
+&=& \frac{D^2}{2} \left( 1 + \frac{2\sqrt{T-1} -1}{2} - \sqrt{T} \right) + \frac{2\sqrt{T} - 1}{2} G^2 \\
+&=& \frac{D^2}{2} \left( \frac{1}{2} + \sqrt{T-1} - \sqrt{T} \right) + \frac{2\sqrt{T} - 1}{2} G^2 \\
+&<& \frac{D^2}{4} + \sqrt{T}G^2
+\end{eqnarray*}
+
+再由$f$的凸性质，即有$f(\overline{w}_T) - f(w) < \left( \frac{1}{T} \sum_{t=1}^T f(w_t) \right) - f(w) < \frac{D^2}{4T} + \frac{G^2}{\sqrt{T}} = O\left(\frac{1}{\sqrt{t}}\right)$成立。
+
 	~\\
 	~\\
 	~\\
