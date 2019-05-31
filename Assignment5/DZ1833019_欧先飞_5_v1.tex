@@ -1,0 +1,225 @@
+\documentclass[a4paper,UTF8]{article}
+\usepackage{ctex}
+\usepackage[margin=1.25in]{geometry}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{enumerate}
+\usepackage{bm}
+\usepackage{tcolorbox}
+\usepackage{hyperref}
+\usepackage{algorithm}  
+\usepackage{algorithmicx}  
+\usepackage{algpseudocode}
+\usepackage{pgfplots}
+\usepackage{epsfig}
+\usepackage{color}
+\usepackage{mdframed}
+\usepackage{lipsum}
+% add the new command "\norm"
+\usepackage{mathtools}
+\let\oldnorm\norm   % <-- Store original \norm as \oldnorm
+\let\norm\undefined % <-- "Undefine" \norm
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
+\newmdtheoremenv{thm-box}{myThm}
+\newmdtheoremenv{prop-box}{Proposition}
+\newmdtheoremenv{def-box}{定义}
+
+\setlength{\evensidemargin}{.25in}
+\setlength{\textwidth}{6in}
+\setlength{\topmargin}{-0.5in}
+\setlength{\topmargin}{-0.5in}
+% \setlength{\textheight}{9.5in}
+%%%%%%%%%%%%%%%%%%此处用于设置页眉页脚%%%%%%%%%%%%%%%%%%
+\usepackage{fancyhdr}                                
+\usepackage{lastpage}                                           
+\usepackage{layout}                                             
+\footskip = 10pt 
+\pagestyle{fancy}                    % 设置页眉                 
+\lhead{2019年春季}                    
+\chead{机器学习理论导引}                                                
+% \rhead{第\thepage/\pageref{LastPage}页} 
+\rhead{作业五}                                                                                               
+\cfoot{\thepage}                                                
+\renewcommand{\headrulewidth}{1pt}  			%页眉线宽，设为0可以去页眉线
+\setlength{\skip\footins}{0.5cm}    			%脚注与正文的距离           
+\renewcommand{\footrulewidth}{0pt}  			%页脚线宽，设为0可以去页脚线
+
+\makeatletter 									%设置双线页眉                                        
+\def\headrule{{\if@fancyplain\let\headrulewidth\plainheadrulewidth\fi%
+		\hrule\@height 1.0pt \@width\headwidth\vskip1pt	%上面线为1pt粗  
+		\hrule\@height 0.5pt\@width\headwidth  			%下面0.5pt粗            
+		\vskip-2\headrulewidth\vskip-1pt}      			%两条线的距离1pt        
+	\vspace{6mm}}     								%双线与下面正文之间的垂直间距              
+\makeatother  
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\numberwithin{equation}{section}
+%\usepackage[thmmarks, amsmath, thref]{ntheorem}
+\newtheorem{theorem}{Theorem}
+\newtheorem*{myDef}{Definition}
+\newtheorem*{mySol}{Solution}
+\newtheorem*{myAnalysis}{Analysis}
+\newtheorem*{myProof}{Proof}
+\newtheorem*{myRemark}{备注}
+\newcommand{\indep}{\rotatebox[origin=c]{90}{$\models$}}
+\newcommand*\diff{\mathop{}\!\mathrm{d}}
+
+\usepackage{multirow}
+
+%--
+
+%--
+\begin{document}
+\renewcommand{\tilde}{\mathbf{w}idetilde}
+\renewcommand{\hat}{\mathbf{w}idehat}
+
+	\title{机器学习理论导引\\
+		作业五}
+	\author{姓名，邮箱}
+	\maketitle
+	
+	% \section*{作业提交注意事项}
+	% \begin{tcolorbox}
+	% 	\begin{enumerate}
+	% 		\item[(1)] 请严格参照课程网站作业提交方法一节提交作业，未按照要求提交作业，或提交作业格式不正确，将会被扣除部分作业分数；
+	% 		\item[(2)] 截止时间后不接收作业，本次作业记零分；
+	% 		\item[(3)] 本课程要求大家遵守学术诚信，请关注课程主页的详细说明。
+	% 	\end{enumerate}
+	% \end{tcolorbox}
+	
+	% \newpage
+
+\section{[20pts] Online Regression}
+\noindent [在线回归]考虑在线岭回归：
+\begin{itemize}
+  \item 每一时刻$t$，学习器选择分类面$\mathbf{w}_t \in \{\mathbf{w}| \norm{\mathbf{w}} \leq D\} \subseteq \mathbb{R}^d$;
+  \item 学习器观测到样本和标记$(\mathbf{x}_t,y_t)$，并遭受损失
+  \[
+  f_t(\mathbf{w}_t)=(y_t -\mathbf{w}_t^\top \mathbf{x}_t)^2 + \frac{\lambda}{2} \|\mathbf{w}_t\|^2
+  \]
+其中$\lambda>0$是给定的正则化参数，$\norm{\mathbf{x}_t} \leq R$，$|y_t| \leq DR$.
+\end{itemize}
+请问学习器应该采用什么算法更新分类面$\mathbf{w}_t$? 采用该算法之后，学习器的遗憾是多少？\\
+要求：描述算法时，需要给出梯度的具体计算公式、如何设置步长。
+
+\begin{myAnalysis}~\\
+给定$(\mathbf{x}_t, y_t)$，则$\frac{\partial f_t(\mathbf{w}_t)}{\mathbf{w}_t} = \frac{\partial}{\partial \mathbf{w}_t}\left[ (y_t - \mathbf{w}_t^\mathrm{T} \mathbf{x}_t)^2 + \frac{\lambda}{2} \norm{\mathbf{w}_t}_2^2 \right] = 2(\mathbf{w}_t^T \mathbf{x} - y_t) \mathbf{x}_t + \lambda \mathbf{w}_t$，由题意有$\norm{\mathbf{w}_t} \le D$，$\norm{\mathbf{x}_t} \le R$, $|y_t| \le DR$。
+
+所以有$\norm{\frac{\partial f_t(\mathbf{w}_t)}{\mathbf{w}_t}} \le 2|\mathbf{w}_t^\mathrm{T} \mathbf{x}_t - y_t| \norm{\mathbf{x}_t} + \lambda \norm{\mathbf{w}_t} \le 2(DR + DR) R + \lambda D = 4DR^2 + \lambda D$。
+参考定理3.3，将学学习率设置为$\eta_t = \frac{2R}{4DR^2 + \lambda D} \sqrt{t}$，则由定理的结论，可以获得算法的遗憾界为：
+\[
+\sum_{t=1}^T f_t(\mathbf{w}_t) - \min_{\mathbf{w} \in \mathbb{W}} \sum_{t=1}^T f_t(\mathbf{w}) \le \frac{3}{2} 2R [4DR^2 + \lambda D] \sqrt{T} = 3DR[4R^2 + \lambda] \sqrt{T} = O(\sqrt{T})
+\]
+而相应的算法为：
+\begin{algorithm}  
+	\caption{Online Regression}  
+	\begin{algorithmic}[1] %每行显示行号  
+		\State{randomly initialize $\mathbf{w}_1$}
+		\For{t = 1...T}
+		  \State{$\mathbf{w}_{t+1}' = \mathbf{w}_t - \frac{2R}{(4DR^2 + \lambda D) \sqrt{t}} \left[ 2(\mathbf{w}_t^\mathrm{T} \mathbf{x}_t - y_t) \mathbf{x}_t + \lambda \mathbf{w}_t \right] $}
+		  \State{ $\mathbf{w}_{t+1} = \frac{D}{\max\{ D, \norm{\mathbf{w}_{t+1}'} \} } \mathbf{w}_{t+1}' $ }
+		\EndFor  
+	\end{algorithmic} 
+\end{algorithm}  
+
+	~\\
+\end{myAnalysis}
+
+\newpage
+\section{[25pts] Logistic Regression}
+\noindent [在线分类] 考虑有约束的逻辑回归问题：
+\begin{itemize}
+  \item 每一时刻$t$，学习器选择分类面$\mathbf{w}_t \in \{\mathbf{w}| \|\mathbf{w}\| \leq D\} \subseteq \mathbb{R}^d$;
+  \item 学习器观测到样本和标记$(\mathbf{x}_t,y_t)$，并遭受损失
+  \[
+  f_t(\mathbf{w}_t)=\log\left( 1+ \exp(-y_t \mathbf{w}_t^\top \mathbf{x}_t)\right)
+  \]
+其中$\|\mathbf{x}_t\| \leq R$，$y_t \in \{+1,-1\}$.
+\end{itemize}
+请问学习器应该采用什么算法更新分类面$\mathbf{w}_t$？采用该算法之后，学习器的遗憾是多少？\\
+要求：描述算法时，需要给出梯度的具体计算公式、如何设置步长。
+
+\begin{myAnalysis}~\\
+
+给定$(\mathbf{x}_t, y_t)$，则有$\frac{\partial f_t(\mathbf{w}_t)}{\partial \mathbf{w}_t} = \frac{\partial}{\partial \mathbf{w}_t} [ \ln (1 + e^{-y_t\mathbf{w}_t^\mathrm{T} \mathbf{x}_t}) ] = \frac{e^{-y_t \mathbf{w}_t^\mathrm{T} \mathbf{x}_t}}{1 + e^{-y_t \mathbf{w}_t^\mathrm{T} \mathbf{x}_t}} (-y_t \mathbf{x}_t) $，进而可以获得其梯度的上界：$\norm{\frac{\partial f_t(\mathbf{w}_t)}{\partial \mathbf{w}_t}} \le \norm{-y_t \mathbf{x}_t} \le R$。参考定理3.3可以知道，将步长设置为$\eta_t = \frac{2R}{R\sqrt{t}} = \frac{2}{\sqrt{t}}$，可以获得目标算法如下：
+
+\begin{algorithm}  
+	\caption{Online Regression}  
+	\begin{algorithmic}[1] %每行显示行号  
+		\State{randomly initialize $\mathbf{w}_1$}
+		\For{t = 1...T}
+		\State{$\mathbf{w}_{t+1}' = \mathbf{w}_t - \frac{2}{\sqrt{t}} \frac{e^{-y_t \mathbf{w}_t^\mathrm{T} \mathbf{x}_t}}{1 + e^{-y_t \mathbf{w}_t^\mathrm{T} \mathbf{x}_t}} (-y_t \mathbf{x}_t) $}
+		\State{ $\mathbf{w}_{t+1} = \frac{D}{\max\{ D, \norm{\mathbf{w}_{t+1}'} \} } \mathbf{w}_{t+1}' $ }
+		\EndFor  
+	\end{algorithmic} 
+\end{algorithm}
+
+由定理3.3的结论，我们可以获得如下的遗憾界：
+\[
+\sum_{t=1}^T f_t(\mathbf{w}_t) - \min_{\mathbf{w} \in \mathbb{W}} \sum_{t=1}^T f_t(\mathbf{w}) \le \frac{3}{2} 2R \times R \sqrt{T} = 3R^2 \sqrt{T} = O(\sqrt{T})
+\]
+
+	~\\	
+	~\\
+\end{myAnalysis}
+
+\newpage
+\section{[20pts] Exponentially Concave}
+\noindent 对于二次可微函数$f(\cdot):\mathcal{W} \mapsto \mathbb{R}$，它是$\alpha$指数凹的充要条件是什么？\\
+提示：利用函数$f$的梯度和海森矩阵建立充要条件。
+\begin{myAnalysis}~\\
+若函数$f(\mathbf{w})$是$\alpha$指数凹的，则意味着$\exp(-\alpha f(\mathbf{w}))$是凹函数，而这等价于$\exp(-\alpha f(\mathbf{w}))$的海森矩阵半负定。
+
+将$\exp(-\alpha f(\mathbf{w}))$的海森矩阵记为$H$，并记$\mathbf{w} = (w_1, w_2, \ldots, w_d)^\mathrm{T}$，那么有：
+\begin{eqnarray*}
+H_{ij} &=& \frac{\partial^2 \exp(-\alpha f(\mathbf{w}))} { \partial w_i \partial w_j } \\
+&=& \frac{\partial}{\partial w_i} \left[ \frac{\partial \exp(-\alpha f(\mathbf{w}))} { \partial w_j } \right] \\
+&=& \frac{\partial}{\partial w_i} \left[ \exp(-\alpha f(\mathbf{w})) (-\alpha \frac{\partial f(\mathbf{w})}{\partial w_j}) \right] \\
+&=& \exp(-\alpha f(\mathbf{w})) (-\alpha \frac{\partial f(\mathbf{w})}{\partial w_i}) (-\alpha \frac{\partial f(\mathbf{w})}{\partial w_j}) + \exp(-\alpha f(\mathbf{w})) (-\alpha) \frac{\partial^2f(\mathbf{w})}{\partial w_i w_j}
+\end{eqnarray*}
+
+	~\\	
+	~\\
+\end{myAnalysis}
+
+\newpage
+\section{[25pts] Online-to-Batch Conversation}
+\noindent 对于在线凸优化问题，假设$f_1,\ldots,f_T$是从同一分布$\mathcal{P}$独立采样得到。
+假设随机函数$f_1,\ldots,f_T$为凸，其定义域$\mathcal{W}$直径小于$D$，梯度的范数小于$G$，根据讲义介绍，在线梯度下降有如下遗憾界：
+\begin{equation} \label{eqn:regret}
+\sum_{t=1}^T f_t(\mathbf{w}_{t}) -  \sum_{t=1}^T f_t(\mathbf{w}) \leq \frac{3 DG}{2} \sqrt{T}
+\end{equation}
+令$\bar{\mathbf{w}}=\frac{1}{T} \sum_{t=1}^T \mathbf{w}_t$，$F(\cdot)=\mathbb{E}_{f \sim \mathcal{P}}[f(\cdot)]$。在遗憾界(\ref{eqn:regret})的基础上，证明以大概率
+\[
+F(\bar{\mathbf{w}}) -  F(\mathbf{w}) = O\left( \frac{1}{\sqrt{T}}\right).
+\]
+提示：假设随机函数$f$有界，然后利用讲义定理2.2 (针对鞅的Azuma不等式)
+\begin{myProof}~\\
+	~\\
+	~\\
+	~\\
+	~\\	
+	\qed
+\end{myProof}
+
+\newpage
+\section{[10pts] Comparison with SGD}
+\noindent 在讲义定理2.1中，我们证明了SGD同样可以达到
+\[
+F(\bar{\mathbf{w}}) -  F(\mathbf{w}) =O\left( \frac{1}{\sqrt{T}}\right).
+\]
+请问SGD的证明过程和习题4的证明过程有什么异同？
+\begin{myAnalysis}~\\
+	~\\
+	~\\
+	~\\
+	~\\	
+	~\\
+\end{myAnalysis}
+
+
+\end{document}
