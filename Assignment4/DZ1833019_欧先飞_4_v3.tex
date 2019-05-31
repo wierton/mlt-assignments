@@ -105,19 +105,21 @@
 
 令$g(x) = yx - \ln(1 + e^{-x})$，对其求导则有$g'(x) = y + \frac{e^{-x}}{1 + e^{-x}} = y + \frac{1}{1 + e^x}$，容易发现在整个定义域内，$g'(x)$呈上升趋势且$g'(x) > y$恒成立，以下对$y$的取值范围进行讨论。
 
-$(1)$ 当$y \ge 0$时，$g(x)$在$(-\infty, +\infty)$内单调递增，则$f^*(y) = \sup g(x) = \lim_{x \rightarrow +\infty} (yx - \ln(1 + e^{-x})) = 0$。
+$(1)$  当$y > 0$时，$g(x)$在$(-\infty, +\infty)$内单调递增，则$f^*(y) = \sup g(x) = \lim_{x \rightarrow +\infty} (yx - \ln(1 + e^{-x})) = +\infty$，此时$f^*(y)$无定义。
 
-$(2)$ 当$-1 < y < 0$时，$g'(x)$在定义域内存在零点$\ln(-1 - \frac{1}{y})$，亦即$g(x)$在$x=\ln(-1 - \frac{1}{y})$时达到最值，故$f^*(y) = \sup g(x) = g(\ln(-1 - \frac{1}{y})) = y \ln(-1 - \frac{1}{y}) - \ln \left( 1 + e^{-\ln(-1 - \frac{1}{y})} \right) = y \ln(-1 - \frac{1}{y}) - \ln \left( \frac{1}{y+1} \right)$。
+$(2)$ 当$y = 0$时，$g(x)$在$(-\infty, +\infty)$内单调递增，则$f^*(y) = \sup g(x) = \lim_{x \rightarrow +\infty} (yx - \ln(1 + e^{-x})) = 0$。
 
-$(3)$ 当$y = -1$时，$g'(x) < 0$在$(-\infty, +\infty)$内恒成立，所以$\sup g(x) = \lim_{x \rightarrow -\infty} ( yx - \ln(1 + e^{-x}) ) = \lim_{x \rightarrow -\infty} \ln \frac{e^{(y+1)x}}{1+e^x} = 0$。
+$(3)$ 当$-1 < y < 0$时，$g'(x)$在定义域内存在零点$\ln(-1 - \frac{1}{y})$，亦即$g(x)$在$x=\ln(-1 - \frac{1}{y})$时达到最值，故$f^*(y) = \sup g(x) = g(\ln(-1 - \frac{1}{y})) = y \ln(-1 - \frac{1}{y}) - \ln \left( 1 + e^{-\ln(-1 - \frac{1}{y})} \right) = y \ln(-1 - \frac{1}{y}) - \ln \left( \frac{1}{y+1} \right)$。
 
-$(4)$ 当$y < -1$时，$\lim_{x \rightarrow -\infty} ( yx - \ln(1 + e^{-x}) ) = +\infty$，所以$\sup g(x)$不存在，此时$f^*(y)$无定义。
+$(4)$ 当$y = -1$时，$g'(x) < 0$在$(-\infty, +\infty)$内恒成立，所以$\sup g(x) = \lim_{x \rightarrow -\infty} ( yx - \ln(1 + e^{-x}) ) = \lim_{x \rightarrow -\infty} \ln \frac{e^{(y+1)x}}{1+e^x} = 0$。
+
+$(5)$ 当$y < -1$时，$\lim_{x \rightarrow -\infty} ( yx - \ln(1 + e^{-x}) ) = +\infty$，所以$\sup g(x)$不存在，此时$f^*(y)$无定义。
 
 综上所述
 \begin{eqnarray*}
 f^*(y) = \left\{
 \begin{aligned}
-	0 &,& y \ge 0 \\
+	0 &,& y = 0 \\
 	y \ln(-1 - \frac{1}{y}) - \ln \left( \frac{1}{y+1} \right) &,& -1 < y < 0 \\
 	0 &,& y = -1 \\
 \end{aligned}
@@ -207,25 +209,24 @@ f(\mathbf{w}_t) - f(\mathbf{w}) &\le& \nabla f(\mathbf{w}_t) ^ T (\mathbf{w}_t -
 &=& \frac{1}{2\eta_1} \norm{\mathbf{w}_1 - \mathbf{w}}_2^2 + \sum_{t=1}^{T - 1} \left( \frac{1}{2\eta_{t+1}} - \frac{1}{2\eta_t} \right) \norm{\mathbf{w}_{t+1} - \mathbf{w}}_2^2 - \frac{1}{2\eta_T}\norm{\mathbf{w}_{T+1} - \mathbf{w}}_2^2 + \frac{1}{2} \sum_{t=1}^T \eta_t G^2
 \end{eqnarray*}
 
-由题意可设$\eta_t = \frac{1}{\sqrt{t}}$，则$\sum_{t=1}^T \frac{1}{\sqrt{t}} < 1 + \int_1^T \frac{1}{\sqrt{x}} dx = 1 + (2\sqrt{x})|_1^T = 2\sqrt{T} - 1$，代入上面的不等式则有：
+由题意可设$\eta_t = \frac{a}{\sqrt{t}}$，而$\sum_{t=1}^T \frac{1}{\sqrt{t}} < 1 + \int_1^T \frac{1}{\sqrt{x}} dx = 1 + (2\sqrt{x})|_1^T = 2\sqrt{T} - 1$，代入上面的不等式则有：
 \begin{eqnarray*}
 \sum_{t=1}^T \left[ f(\mathbf{w}_t) - f(\mathbf{w}) \right] &\le& \frac{1}{2\eta_1} \norm{\mathbf{w}_1 - \mathbf{w}}_2^2 + \sum_{t=1}^{T - 1} \left( \frac{1}{2\eta_{t+1}} - \frac{1}{2\eta_t} \right) \norm{\mathbf{w}_{t+1} - \mathbf{w}}_2^2 - \frac{1}{2\eta_T}\norm{\mathbf{w}_{T+1} - \mathbf{w}}_2^2 + \frac{1}{2} \sum_{t=1}^T \eta_t G^2 \\
-&=& \frac{\norm{\mathbf{w}_1 - \mathbf{w}}_2^2}{2} + \sum_{t=1}^{T - 1} \left( \frac{\sqrt{t+1}}{2} - \frac{\sqrt{t}}{2} \right) \norm{\mathbf{w}_{t+1} - \mathbf{w}}_2^2 - \frac{\sqrt{T}}{2}\norm{\mathbf{w}_{T+1} - \mathbf{w}}_2^2 + \frac{2\sqrt{T} - 1}{2} G^2 \\
-&=& \frac{\norm{\mathbf{w}_1 - \mathbf{w}}_2^2}{2} + \sum_{t=1}^{T - 1} \frac{1}{2(\sqrt{t+1} + \sqrt{t})}  \norm{\mathbf{w}_{t+1} - \mathbf{w}}_2^2 - \frac{\sqrt{T}}{2}\norm{\mathbf{w}_{T+1} - \mathbf{w}}_2^2 + \frac{2\sqrt{T} - 1}{2} G^2 \\
-&<& \frac{\norm{\mathbf{w}_1 - \mathbf{w}}_2^2}{2} + \sum_{t=1}^{T - 1} \frac{1}{4\sqrt{t}}  \norm{\mathbf{w}_{t+1} - \mathbf{w}}_2^2 - \frac{\sqrt{T}}{2}\norm{\mathbf{w}_{T+1} - \mathbf{w}}_2^2 + \frac{2\sqrt{T} - 1}{2} G^2 \\
-&=& \frac{\norm{\mathbf{w}_1 - \mathbf{w}}_2^2}{2} + \frac{2\sqrt{T-1} -1}{4}  \norm{\mathbf{w}_{t+1} - \mathbf{w}}_2^2 - \frac{\sqrt{T}}{2}\norm{\mathbf{w}_{T+1} - \mathbf{w}}_2^2 + \frac{2\sqrt{T} - 1}{2} G^2
+&=& \frac{\norm{\mathbf{w}_1 - \mathbf{w}}_2^2}{2a} + \sum_{t=1}^{T - 1} \left( \frac{\sqrt{t+1}}{2a} - \frac{\sqrt{t}}{2a} \right) \norm{\mathbf{w}_{t+1} - \mathbf{w}}_2^2 - \frac{\sqrt{T}}{2a}\norm{\mathbf{w}_{T+1} - \mathbf{w}}_2^2 + \frac{2\sqrt{T} - 1}{2} aG^2 \\
+&=& \frac{\norm{\mathbf{w}_1 - \mathbf{w}}_2^2}{2a} + \sum_{t=1}^{T - 1} \frac{1}{2a(\sqrt{t+1} + \sqrt{t})}  \norm{\mathbf{w}_{t+1} - \mathbf{w}}_2^2 - \frac{\sqrt{T}}{2a}\norm{\mathbf{w}_{T+1} - \mathbf{w}}_2^2 + \frac{2\sqrt{T} - 1}{2} aG^2 \\
+&<& \frac{\norm{\mathbf{w}_1 - \mathbf{w}}_2^2}{2a} + \sum_{t=1}^{T - 1} \frac{1}{4a\sqrt{t}}  \norm{\mathbf{w}_{t+1} - \mathbf{w}}_2^2 - \frac{\sqrt{T}}{2a}\norm{\mathbf{w}_{T+1} - \mathbf{w}}_2^2 + \frac{2\sqrt{T} - 1}{2} a G^2 \\
+&=& \frac{\norm{\mathbf{w}_1 - \mathbf{w}}_2^2}{2a} + \frac{2\sqrt{T-1} -1}{4a}  \norm{\mathbf{w}_{t+1} - \mathbf{w}}_2^2 - \frac{\sqrt{T}}{2a}\norm{\mathbf{w}_{T+1} - \mathbf{w}}_2^2 + \frac{2\sqrt{T} - 1}{2}a G^2
 \end{eqnarray*}
 
 参考slides中对定义域直径的假设，上述不等式可以继续化简为：
 \begin{eqnarray*}
-\sum_{t=1}^T \left[ f(\mathbf{w}_t) - f(\mathbf{w}) \right] &\le& \frac{\norm{\mathbf{w}_1 - \mathbf{w}}_2^2}{2} + \frac{2\sqrt{T-1} -1}{4}  \norm{\mathbf{w}_{t+1} - \mathbf{w}}_2^2 - \frac{\sqrt{T}}{2}\norm{\mathbf{w}_{T+1} - \mathbf{w}}_2^2 + \frac{2\sqrt{T} - 1}{2} G^2 \\
-&\le& \frac{D^2}{2} + \frac{2\sqrt{T-1} -1}{4}  D^2 - \frac{\sqrt{T}}{2}D^2 + \frac{2\sqrt{T} - 1}{2} G^2 \\
-&=& \frac{D^2}{2} \left( 1 + \frac{2\sqrt{T-1} -1}{2} - \sqrt{T} \right) + \frac{2\sqrt{T} - 1}{2} G^2 \\
-&=& \frac{D^2}{2} \left( \frac{1}{2} + \sqrt{T-1} - \sqrt{T} \right) + \frac{2\sqrt{T} - 1}{2} G^2 \\
-&<& \frac{D^2}{4} + \sqrt{T}G^2
+\sum_{t=1}^T \left[ f(\mathbf{w}_t) - f(\mathbf{w}) \right] &\le& \frac{\norm{\mathbf{w}_1 - \mathbf{w}}_2^2}{2a} + \frac{2\sqrt{T-1} -1}{4a}  \norm{\mathbf{w}_{t+1} - \mathbf{w}}_2^2 - \frac{\sqrt{T}}{2a}\norm{\mathbf{w}_{T+1} - \mathbf{w}}_2^2 + \frac{2\sqrt{T} - 1}{2} aG^2 \\
+&\le& \frac{D^2}{2a} + \frac{2\sqrt{T-1} -1}{4a}  D^2 + \frac{2\sqrt{T} - 1}{2}a G^2 \\
+&=& \frac{D^2}{2a} \left( 1 + \frac{2\sqrt{T-1} -1}{2} \right) + \frac{2\sqrt{T} - 1}{2} G^2 \\
+&<& \frac{D^2}{2a} \left( 1 + \sqrt{T} \right) + \sqrt{T}a G^2
 \end{eqnarray*}
 
-再由$f$的凸性质，即有$f(\overline{\mathbf{w}}_T) - f(\mathbf{w}) < \left( \frac{1}{T} \sum_{t=1}^T f(\mathbf{w}_t) \right) - f(\mathbf{w}) < \frac{D^2}{4T} + \frac{G^2}{\sqrt{T}} = O\left(\frac{1}{\sqrt{t}}\right)$成立。
+再由Jensen不等式便有$f(\overline{\mathbf{w}}_T) - f(\mathbf{w}) < \left( \frac{1}{T} \sum_{t=1}^T f(\mathbf{w}_t) \right) - f(\mathbf{w}) < \frac{D^2}{2a} (\frac{1}{T} + \frac{1}{\sqrt{T}}) + \frac{G^2}{\sqrt{T}} = O\left(\frac{1}{\sqrt{T}}\right)$成立。
 
 	~\\
 	~\\
@@ -300,7 +301,7 @@ $(2)$ 令$\eta_t = \frac{2}{\lambda t}$，则由$(1)$的推导可得
 && - \frac{1}{2\eta_{T+1}}\norm{\mathbf{w}_{T+1} - \mathbf{w}}_2^2 + \sum_{t=1}^T \frac{\eta_t}{2} G^2 + \sum_{t=1}^T \epsilon_t \\
 &=& \sum_{t=2}^T \left( \frac{\lambda t}{4} - \frac{\lambda (t-1)}{4} - \frac{\lambda}{2} \right) \norm{\mathbf{w}_t - \mathbf{w}}_2^2 + \left( \frac{\lambda}{4} - \frac{\lambda}{2} \right) \norm{\mathbf{w}_1 - \mathbf{w}}_2^2 \\
 && - \frac{1}{2\eta_{T+1}}\norm{\mathbf{w}_{T+1} - \mathbf{w}}_2^2 + \sum_{t=1}^T \frac{1}{\lambda t} G^2 + \sum_{t=1}^T \epsilon_t \\
-&\le& \frac{1 + \ln T}{\lambda}G^2 + \sum_{t=1}^T \epsilon_t - \sum_{t=1}^T \norm{\mathbf{w}_t - \mathbf{w}}_2^2 - \frac{1}{2\eta_{T+1}}\norm{\mathbf{w}_{T+1}}_2^2 \\
+&\le& \frac{1 + \ln T}{\lambda}G^2 + \sum_{t=1}^T \epsilon_t - \frac{\lambda}{4} \sum_{t=1}^T \norm{\mathbf{w}_t - \mathbf{w}}_2^2 - \frac{1}{2\eta_{T+1}}\norm{\mathbf{w}_{T+1}}_2^2 \\
 &\le& \frac{1 + \ln T}{\lambda}G^2 + \sum_{t=1}^T \epsilon_t \\
 \Longrightarrow \frac{1}{T}\sum_{t=1}^T F(\mathbf{w}_t) - F(\mathbf{w}) &\le& \frac{1 + \ln T}{\lambda T}G^2 + \frac{1}{T}\sum_{t=1}^T \epsilon_t
 \end{eqnarray*}

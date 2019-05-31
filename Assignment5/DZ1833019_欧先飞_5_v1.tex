@@ -107,6 +107,7 @@
 要求：描述算法时，需要给出梯度的具体计算公式、如何设置步长。
 
 \begin{myAnalysis}~\\
+
 给定$(\mathbf{x}_t, y_t)$，则$\frac{\partial f_t(\mathbf{w}_t)}{\mathbf{w}_t} = \frac{\partial}{\partial \mathbf{w}_t}\left[ (y_t - \mathbf{w}_t^\mathrm{T} \mathbf{x}_t)^2 + \frac{\lambda}{2} \norm{\mathbf{w}_t}_2^2 \right] = 2(\mathbf{w}_t^T \mathbf{x} - y_t) \mathbf{x}_t + \lambda \mathbf{w}_t$，由题意有$\norm{\mathbf{w}_t} \le D$，$\norm{\mathbf{x}_t} \le R$, $|y_t| \le DR$。
 
 所以有$\norm{\frac{\partial f_t(\mathbf{w}_t)}{\mathbf{w}_t}} \le 2|\mathbf{w}_t^\mathrm{T} \mathbf{x}_t - y_t| \norm{\mathbf{x}_t} + \lambda \norm{\mathbf{w}_t} \le 2(DR + DR) R + \lambda D = 4DR^2 + \lambda D$。
@@ -172,6 +173,7 @@
 \noindent 对于二次可微函数$f(\cdot):\mathcal{W} \mapsto \mathbb{R}$，它是$\alpha$指数凹的充要条件是什么？\\
 提示：利用函数$f$的梯度和海森矩阵建立充要条件。
 \begin{myAnalysis}~\\
+	
 若函数$f(\mathbf{w})$是$\alpha$指数凹的，则意味着$\exp(-\alpha f(\mathbf{w}))$是凹函数，而这等价于$\exp(-\alpha f(\mathbf{w}))$的海森矩阵半负定。
 
 将$\exp(-\alpha f(\mathbf{w}))$的海森矩阵记为$H$，并记$\mathbf{w} = (w_1, w_2, \ldots, w_d)^\mathrm{T}$，那么有：
@@ -179,8 +181,11 @@
 H_{ij} &=& \frac{\partial^2 \exp(-\alpha f(\mathbf{w}))} { \partial w_i \partial w_j } \\
 &=& \frac{\partial}{\partial w_i} \left[ \frac{\partial \exp(-\alpha f(\mathbf{w}))} { \partial w_j } \right] \\
 &=& \frac{\partial}{\partial w_i} \left[ \exp(-\alpha f(\mathbf{w})) (-\alpha \frac{\partial f(\mathbf{w})}{\partial w_j}) \right] \\
-&=& \exp(-\alpha f(\mathbf{w})) (-\alpha \frac{\partial f(\mathbf{w})}{\partial w_i}) (-\alpha \frac{\partial f(\mathbf{w})}{\partial w_j}) + \exp(-\alpha f(\mathbf{w})) (-\alpha) \frac{\partial^2f(\mathbf{w})}{\partial w_i w_j}
+&=& \exp(-\alpha f(\mathbf{w})) (-\alpha \frac{\partial f(\mathbf{w})}{\partial w_i}) (-\alpha \frac{\partial f(\mathbf{w})}{\partial w_j}) + \exp(-\alpha f(\mathbf{w})) (-\alpha) \frac{\partial^2f(\mathbf{w})}{\partial w_i w_j} \\
+&=& \alpha^2 \exp(-\alpha f(\mathbf{w})) \frac{\partial f(\mathbf{w})}{\partial w_i} \frac{\partial f(\mathbf{w})}{\partial w_j} - \alpha \exp(-\alpha f(\mathbf{w})) \frac{\partial^2 f(\mathbf{w})}{\partial \mathbf{w}_i \partial \mathbf{w}_j}
 \end{eqnarray*}
+
+所以$H = \alpha^2 \exp(-\alpha f(\mathbf{w})) \nabla f(\mathbf{w}) \nabla f(\mathbf{w}) ^ \mathbf{T} - \alpha \exp(-\alpha f(\mathbf{w})) \nabla^2 f(\mathbf{w})$，由定义知：f是$\alpha$指数凹的等价于H半负定。
 
 	~\\	
 	~\\
@@ -199,8 +204,23 @@ F(\bar{\mathbf{w}}) -  F(\mathbf{w}) = O\left( \frac{1}{\sqrt{T}}\right).
 \]
 提示：假设随机函数$f$有界，然后利用讲义定理2.2 (针对鞅的Azuma不等式)
 \begin{myProof}~\\
-	~\\
-	~\\
+	
+首先对$F(\bar{\mathbf{w}}) - F(\mathbf{w})$进行变换：
+\begin{eqnarray*}
+F(\bar{\mathbf{w}}) - F(\mathbf{w}) &=& F(\frac{1}{T} \sum_{t=1}^T \mathbf{w}_t) - F(\mathbf{w}) \\
+&\le& \frac{1}{T} \sum_{t=1}^T F(\mathbf{w}_t) - F(\mathbf{w}) \\
+&=& \frac{1}{T} \sum_{t=1}^T [F(\mathbf{w}_t) - F(\mathbf{w}) ] \\
+&=& \frac{1}{T} \sum_{t=1}^T [ F(\mathbf{w}_t) - f_t(\mathbf{w}_t) + f_t(\mathbf{w}_t) - f_t(\mathbf{w}) + f_t(\mathbf{w}) - F(\mathbf{w}) ] \\
+&=& \frac{1}{T} \sum_{t=1}^T [ F(\mathbf{w}_t) - f_t(\mathbf{w}_t)] + \frac{1}{T} \sum_{t=1}^T [ f_t(\mathbf{w}) - F(\mathbf{w}) ] + \frac{1}{T} \sum_{t=1}^T [ f_t(\mathbf{w}_t) - f_t(\mathbf{w}) ]
+\end{eqnarray*}
+
+由题目中\ref{eqn:regret}知，上述不等式右边最后一项的上界为$\frac{3DG}{2\sqrt{T}}$，而由于$\mathbb{E} [ f_t(\mathbf{w}_t) ] = F(\mathbf{w}_t)$、$\mathbb{E} [ f_t(\mathbf{w}) ] = F(\mathbf{w})$，所以上述不等式右边前两项，从$t=1$到$T$构成分别构成两个鞅差序列。假设$|f_t(\cdot)| \le c$，则对鞅差序列中每一项有$|F(\mathbf{w}_t) - f_t(\mathbf{w}_t)| < 2c$，进而由Azuma不等式可以得到：
+$\Pr \left[ \sum_{t=1}^T \left( F(\mathbf{w}_t - f_t(\mathbf{w}_t)) \right) \ge \epsilon \right] \le \exp( - \frac{\epsilon^2}{8Tc^2} )$，令$\exp( - \frac{\epsilon^2}{8Tc^2} ) = \delta$可以得到：
+\[
+\Pr\left[\sum_{t=1}^T \left( F(\mathbf{w}_t - f_t(\mathbf{w}_t)) \right) \ge \sqrt{8Tc^2\ln \frac{1}{\delta}}  \right] \le \delta
+\]
+对于不等式右边第二项同理可得$\Pr\left[\sum_{t=1}^T \left( f_t(\mathbf{w}_t - F(\mathbf{w}_t)) \right) \ge \sqrt{8Tc^2\ln \frac{1}{\delta}}  \right] \le \delta$。将这两个结论代入上述不等式，则可以得到$\Pr\left[ F(\bar{\mathbf{w}}) - F(\mathbf{w}) \le \frac{2}{T}\sqrt{8Tc^2\ln \frac{1}{\delta}} + \frac{3DG}{2\sqrt{T}}\right] = 1 - \delta$，而$\frac{2}{T}\sqrt{8Tc^2\ln \frac{1}{\delta}} + \frac{3DG}{2\sqrt{T}} = 4c\sqrt{\frac{\ln 1 / \delta}{T}} + \frac{3DG}{2\sqrt{T}}  = O(\frac{1}{\sqrt{T}})$。
+
 	~\\
 	~\\	
 	\qed
@@ -214,8 +234,9 @@ F(\bar{\mathbf{w}}) -  F(\mathbf{w}) =O\left( \frac{1}{\sqrt{T}}\right).
 \]
 请问SGD的证明过程和习题4的证明过程有什么异同？
 \begin{myAnalysis}~\\
-	~\\
-	~\\
+$(1)$两者都利用凸函数的条件对当前解与最优解的上界进行评估，并利用等式$\langle \mathbf{a} - \mathbf{b}, \mathbf{a} - \mathbf{c} \rangle = \frac{1}{2} ( \norm{\mathbf{a}-\mathbf{b}}_2^2 + \norm{\mathbf{a}-\mathbf{c}}_2^2 - \norm{\mathbf{b}-\mathbf{c}}_2^2 )$将上界转化为逐差的形式，然后对T项累加以放缩上界。
+~\\
+$(2)$不同的地方在于SGD的证明过程直接对函数空间$\mathcal{F}$的期望$F$进行放缩，而习题4中的证明中所利用到的遗憾界是从采样得到的函数$f_t$出发开始放缩。
 	~\\
 	~\\	
 	~\\
