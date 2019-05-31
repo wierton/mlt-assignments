@@ -149,7 +149,7 @@
 给定$(\mathbf{x}_t, y_t)$，则有$\frac{\partial f_t(\mathbf{w}_t)}{\partial \mathbf{w}_t} = \frac{\partial}{\partial \mathbf{w}_t} [ \ln (1 + e^{-y_t\mathbf{w}_t^\mathrm{T} \mathbf{x}_t}) ] = \frac{e^{-y_t \mathbf{w}_t^\mathrm{T} \mathbf{x}_t}}{1 + e^{-y_t \mathbf{w}_t^\mathrm{T} \mathbf{x}_t}} (-y_t \mathbf{x}_t) $，进而可以获得其梯度的上界：$\norm{\frac{\partial f_t(\mathbf{w}_t)}{\partial \mathbf{w}_t}} \le \norm{-y_t \mathbf{x}_t} \le R$。参考定理3.3可以知道，将步长设置为$\eta_t = \frac{2R}{R\sqrt{t}} = \frac{2}{\sqrt{t}}$，可以获得目标算法如下：
 
 \begin{algorithm}  
-	\caption{Online Regression}  
+	\caption{Logistic Regression}  
 	\begin{algorithmic}[1] %每行显示行号  
 		\State{randomly initialize $\mathbf{w}_1$}
 		\For{t = 1...T}
