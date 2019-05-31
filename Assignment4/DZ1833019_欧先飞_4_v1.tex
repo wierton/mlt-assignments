@@ -136,22 +136,50 @@ f^*(y) = \left\{
 \]
 
 \begin{myProof}~\\
-首先简记$\Pi_{\mathcal{W}}(\mathbf{x})$为$\mathbf{x}_\mathcal{W}$，由于$\mathcal{W}$是凸包，所以有$\forall \mathbf{x} \forall \mathbf{y}  (\mathbf{y} - \mathbf{x}_\mathcal{W})^\mathrm{T}(\mathbf{x}-\mathbf{x}_\mathcal{W}) \le 0 $，以下对$\mathbf{x}$和$\mathbf{y}$的所处的位置进行讨论。
+首先简记$\Pi_{\mathcal{W}}(\mathbf{x})$为$\mathbf{x}_\mathcal{W}$，由于$\mathcal{W}$是凸包，所以有$\forall \mathbf{x} \notin \mathcal{W} \forall \mathbf{y} \in \mathcal{W}  (\mathbf{y} - \mathbf{x}_\mathcal{W})^\mathrm{T}(\mathbf{x}-\mathbf{x}_\mathcal{W}) \le 0 $，以下对$\mathbf{x}$和$\mathbf{y}$的所处的位置进行讨论。
 ~\\
-$(1)$ $\mathbf{x}$和$\mathbf{y}$均在凸包$\mathcal{W}$范围内，则$\norm{\Pi_{\mathcal{W}}(\mathbf{x})-\Pi_{\mathcal{W}}(\mathbf{y})} = \norm{\mathbf{x} - \mathbf{y}}$
+$(1)$ $\mathbf{x}$和$\mathbf{y}$均在凸包$\mathcal{W}$范围内，则$\mathbf{x}_\mathcal{W} = \mathbf{x}$、$\mathbf{y}_\mathcal{W} = \mathbf{y}$，所以有 $\norm{\mathbf{x}_\mathcal{W}-\mathbf{y}_\mathcal{W}} = \norm{\mathbf{x} - \mathbf{y}}$
 ~\\
-$(2)$ 两点中有且只有一点在$\mathcal{W}$中，不妨设$\mathbf{y}$在$\mathcal{W}$中，则由投影操作的定义有不等式$\norm{\mathbf{x} - \mathbf{x}_\mathcal{W}} \le \norm{\mathbf{x} - \mathbf{y}}$，反设$\norm{\mathbf{x} - \mathbf{y}} < \norm{\mathbf{x}_\mathcal{W} - \mathbf{y}_\mathcal{W}} = \norm{\mathbf{x}_\mathcal{W} - \mathbf{y}}$，于是有
+$(2)$ 两点中有且只有一点在$\mathcal{W}$中，不妨设$\mathbf{y}$在$\mathcal{W}$中。反设原命题不成立，即有$\norm{\mathbf{x} - \mathbf{y}} < \norm{\mathbf{x}_\mathcal{W} - \mathbf{y}_\mathcal{W}} = \norm{\mathbf{x}_\mathcal{W} - \mathbf{y}}$，于是有
 
 \begin{gather}
-\norm{\mathbf{x} - \mathbf{y}} < \norm{\mathbf{x}_\mathcal{W} - \mathbf{y}} \label{eq:r1} \\
-(\mathbf{y}-\mathbf{x}_\mathcal{W})
+\norm{\mathbf{x} - \mathbf{y}}_2^2 < \norm{\mathbf{x}_\mathcal{W} - \mathbf{y}}_2^2 \label{eq:r1} \\
+(\mathbf{y}-\mathbf{x}_\mathcal{W})^\mathrm{T}(\mathbf{x} - \mathbf{x}_\mathcal{W}) \le 0  \label{eq:r2}
 \end{gather}
 
+计算$\ref{eq:r1} + 2 \times \ref{eq:r2}$则有：
+\begin{eqnarray*}
+&& (\mathbf{x}-\mathbf{y})^\mathrm{T}(\mathbf{x}-\mathbf{y}) + 2(\mathbf{y} - \mathbf{x}_\mathcal{W})^\mathrm{T}(\mathbf{x}-\mathbf{x}_\mathcal{W}) < (\mathbf{x}_\mathcal{W} - \mathbf{y})^\mathrm{T}(\mathbf{x}_\mathcal{W} - \mathbf{y}) \\
+&\Longrightarrow& 
+(\mathbf{x}-\mathbf{y})^\mathrm{T}(\mathbf{x}-\mathbf{y}) + (\mathbf{y} - \mathbf{x}_\mathcal{W})^\mathrm{T}(2\mathbf{x} - 2\mathbf{x}_w - \mathbf{y} + \mathbf{x}_\mathcal{W}) < 0 \\
+&\Longrightarrow&
+(\mathbf{x}-\mathbf{y})^\mathrm{T}(\mathbf{x}-\mathbf{y}) + (\mathbf{y} - \mathbf{x}_\mathcal{W})^\mathrm{T}(\mathbf{x} - \mathbf{y} + \mathbf{x} - \mathbf{x}_\mathcal{W}) < 0 \\
+&\Longrightarrow&
+(\mathbf{x}-\mathbf{y})^\mathrm{T}(\mathbf{x}-\mathbf{y}) + (\mathbf{y} - \mathbf{x}_\mathcal{W})^\mathrm{T}(\mathbf{x} - \mathbf{y}) + (\mathbf{y} - \mathbf{x}_\mathcal{W})^\mathrm{T}(\mathbf{x} - \mathbf{x}_\mathcal{W}) < 0 \\
+&\Longrightarrow&
+(\mathbf{x} - \mathbf{x}_\mathcal{W})^\mathrm{T}(\mathbf{x} - \mathbf{y}) + (\mathbf{y} - \mathbf{x}_\mathcal{W})^\mathrm{T}(\mathbf{x} - \mathbf{x}_\mathcal{W}) < 0 \\
+&\Longrightarrow&
+(\mathbf{x} - \mathbf{x}_\mathcal{W})^\mathrm{T}(\mathbf{x} - \mathbf{x}_\mathcal{W})^\mathrm{T} < 0 \\
+&\Longrightarrow&
+\norm{\mathbf{x} - \mathbf{x}_\mathcal{W}}_2^2 < 0
+\end{eqnarray*}
+
+这与事实$\norm{\mathbf{x} - \mathbf{x}_\mathcal{W}}_2^2 \ge 0$矛盾，所以反设不成立，继而有$\norm{\mathbf{x} - \mathbf{y}} \ge \norm{\mathbf{x}_\mathcal{W} - \mathbf{y}}$。
 ~\\
-	~\\
-	~\\
-	~\\
-	~\\	
+$(3)$两点均在$\mathcal{\mathcal{W}}$外，由凸包的性质，可以得到如下几个条件：
+\begin{gather}
+(\mathbf{y}_\mathcal{W} - \mathbf{x}_\mathcal{W})^\mathrm{T}(\mathbf{x} - \mathbf{x}_\mathcal{W}) \le 0 \label{eq:z1} \\
+(\mathbf{x}_\mathcal{W} - \mathbf{y}_\mathcal{W})^\mathrm{T}(\mathbf{y} - \mathbf{y}_\mathcal{W}) \le 0 \label{eq:z2}
+\end{gather}
+
+计算$\ref{eq:z1} + \ref{eq:z2}$可以得到：$(\mathbf{x}_\mathcal{W} - \mathbf{y}_\mathcal{W})^\mathrm{T}(\mathbf{x}_\mathcal{W} - \mathbf{y}_\mathcal{W}) < (\mathbf{x}_\mathcal{W} - \mathbf{y}_\mathcal{W})^\mathrm{T}(\mathbf{x} - \mathbf{y})$，而$(\mathbf{x}_\mathcal{W} - \mathbf{y}_\mathcal{W})^\mathrm{T}(\mathbf{x} - \mathbf{y}) = \norm{\mathbf{x}_\mathcal{W} - \mathbf{y}_\mathcal{W}}\norm{\mathbf{x}-\mathbf{y}} \cos \langle \mathbf{x}_\mathcal{W} - \mathbf{y}_\mathcal{W}, \mathbf{x} - \mathbf{y} \rangle \le \norm{\mathbf{x}_\mathcal{W} - \mathbf{y}_\mathcal{W}}\norm{\mathbf{x} - \mathbf{y}}$，所以有$\norm{\mathbf{x}_\mathcal{W} - \mathbf{y}_\mathcal{W}}_2^2 < \norm {\mathbf{x}_\mathcal{W} - \mathbf{y}_\mathcal{W}}\norm{\mathbf{x} - \mathbf{y}}$，由于二范数的非负性，所以可以化简得到$\norm{\mathbf{x}_\mathcal{W} - \mathbf{y}_\mathcal{W}} \le \norm{\mathbf{x} - \mathbf{y}}$。
+
+~\\
+结合$(1)$、$(2)$、$(3)$可知，命题$\norm{\mathbf{x}_\mathcal{W} - \mathbf{y}_\mathcal{W}} \le \norm{\mathbf{x} - \mathbf{y}}$成立。
+
+
+~\\
+
 	\qed
 \end{myProof}
 
@@ -163,6 +191,42 @@ $(2)$ 两点中有且只有一点在$\mathcal{W}$中，不妨设$\mathbf{y}$在$
 \]
 
 \begin{myAnalysis}~\\
+设最优值为$\mathbf{w}$，首先参考slides中的证明有：
+\begin{eqnarray*}
+f(\mathbf{w}_t) - f(\mathbf{w}) &\le& \nabla f(\mathbf{w}_t) ^ T (\mathbf{w}_t - \mathbf{w}) \\
+&=& \frac{1}{\eta_t} \langle \mathbf{w}_t - \mathbf{w}_{t+1}', \mathbf{w}_t - \mathbf{w} \rangle \\
+&=& \frac{1}{2\eta_t} \left[ \norm{\mathbf{w}_t - \mathbf{w}_{t+1}'}_2^2 + \norm{\mathbf{w}_t - \mathbf{w}}_2^2 - \norm{\mathbf{w}_{t+1}' - \mathbf{w}}_2^2 \right] \\
+&=& \frac{1}{2\eta_t} \left[ \norm{\mathbf{w}_t - \mathbf{w}}_2^2 - \norm{\mathbf{w}_{t+1}' - \mathbf{w}}_2^2 \right] + \frac{1}{2\eta_t} \norm{\mathbf{w}_t - \mathbf{w}_{t+1}'}_2^2 \\
+&=& \frac{1}{2\eta_t} \left[ \norm{\mathbf{w}_t - \mathbf{w}}_2^2 - \norm{\mathbf{w}_{t+1}' - \mathbf{w}}_2^2 \right] + \frac{\eta_t}{2} \norm{\nabla f(\mathbf{w}_t)}_2^2 \\
+&\le& \frac{1}{2\eta_t} \left[ \norm{\mathbf{w}_t - \mathbf{w}}_2^2 - \norm{\mathbf{w}_{t+1} - \mathbf{w}}_2^2 \right] + \frac{\eta_t}{2} G^2
+\end{eqnarray*}
+
+将上面得到的不等式从$t=1$加到T则有：
+\begin{eqnarray*}
+\sum_{t=1}^T \left[ f(\mathbf{w}_t) - f(\mathbf{w}) \right] &\le& \sum_{t=1}^T \frac{1}{2\eta_t} \norm{\mathbf{w}_t - \mathbf{w}}_2^2 - \sum_{t=1}^T \frac{1}{2\eta_t} \norm{\mathbf{w}_{t+1} - \mathbf{w}}_2^2 + \frac{1}{2} \sum_{t=1}^T \eta_t G^2 \\
+&=& \frac{1}{2\eta_1} \norm{\mathbf{w}_1 - \mathbf{w}}_2^2 + \sum_{t=1}^{T - 1} \left( \frac{1}{2\eta_{t+1}} - \frac{1}{2\eta_t} \right) \norm{\mathbf{w}_{t+1} - \mathbf{w}}_2^2 - \frac{1}{2\eta_T}\norm{\mathbf{w}_{T+1} - \mathbf{w}}_2^2 + \frac{1}{2} \sum_{t=1}^T \eta_t G^2
+\end{eqnarray*}
+
+由题意可设$\eta_t = \frac{1}{\sqrt{t}}$，则$\sum_{t=1}^T \frac{1}{\sqrt{t}} < 1 + \int_1^T \frac{1}{\sqrt{x}} dx = 1 + (2\sqrt{x})|_1^T = 2\sqrt{T} - 1$，代入上面的不等式则有：
+\begin{eqnarray*}
+\sum_{t=1}^T \left[ f(\mathbf{w}_t) - f(\mathbf{w}) \right] &\le& \frac{1}{2\eta_1} \norm{\mathbf{w}_1 - \mathbf{w}}_2^2 + \sum_{t=1}^{T - 1} \left( \frac{1}{2\eta_{t+1}} - \frac{1}{2\eta_t} \right) \norm{\mathbf{w}_{t+1} - \mathbf{w}}_2^2 - \frac{1}{2\eta_T}\norm{\mathbf{w}_{T+1} - \mathbf{w}}_2^2 + \frac{1}{2} \sum_{t=1}^T \eta_t G^2 \\
+&=& \frac{\norm{\mathbf{w}_1 - \mathbf{w}}_2^2}{2} + \sum_{t=1}^{T - 1} \left( \frac{\sqrt{t+1}}{2} - \frac{\sqrt{t}}{2} \right) \norm{\mathbf{w}_{t+1} - \mathbf{w}}_2^2 - \frac{\sqrt{T}}{2}\norm{\mathbf{w}_{T+1} - \mathbf{w}}_2^2 + \frac{2\sqrt{T} - 1}{2} G^2 \\
+&=& \frac{\norm{\mathbf{w}_1 - \mathbf{w}}_2^2}{2} + \sum_{t=1}^{T - 1} \frac{1}{2(\sqrt{t+1} + \sqrt{t})}  \norm{\mathbf{w}_{t+1} - \mathbf{w}}_2^2 - \frac{\sqrt{T}}{2}\norm{\mathbf{w}_{T+1} - \mathbf{w}}_2^2 + \frac{2\sqrt{T} - 1}{2} G^2 \\
+&<& \frac{\norm{\mathbf{w}_1 - \mathbf{w}}_2^2}{2} + \sum_{t=1}^{T - 1} \frac{1}{4\sqrt{t}}  \norm{\mathbf{w}_{t+1} - \mathbf{w}}_2^2 - \frac{\sqrt{T}}{2}\norm{\mathbf{w}_{T+1} - \mathbf{w}}_2^2 + \frac{2\sqrt{T} - 1}{2} G^2 \\
+&=& \frac{\norm{\mathbf{w}_1 - \mathbf{w}}_2^2}{2} + \frac{2\sqrt{T-1} -1}{4}  \norm{\mathbf{w}_{t+1} - \mathbf{w}}_2^2 - \frac{\sqrt{T}}{2}\norm{\mathbf{w}_{T+1} - \mathbf{w}}_2^2 + \frac{2\sqrt{T} - 1}{2} G^2
+\end{eqnarray*}
+
+参考slides中对定义域直径的假设，上述不等式可以继续化简为：
+\begin{eqnarray*}
+\sum_{t=1}^T \left[ f(\mathbf{w}_t) - f(\mathbf{w}) \right] &\le& \frac{\norm{\mathbf{w}_1 - \mathbf{w}}_2^2}{2} + \frac{2\sqrt{T-1} -1}{4}  \norm{\mathbf{w}_{t+1} - \mathbf{w}}_2^2 - \frac{\sqrt{T}}{2}\norm{\mathbf{w}_{T+1} - \mathbf{w}}_2^2 + \frac{2\sqrt{T} - 1}{2} G^2 \\
+&\le& \frac{D^2}{2} + \frac{2\sqrt{T-1} -1}{4}  D^2 - \frac{\sqrt{T}}{2}D^2 + \frac{2\sqrt{T} - 1}{2} G^2 \\
+&=& \frac{D^2}{2} \left( 1 + \frac{2\sqrt{T-1} -1}{2} - \sqrt{T} \right) + \frac{2\sqrt{T} - 1}{2} G^2 \\
+&=& \frac{D^2}{2} \left( \frac{1}{2} + \sqrt{T-1} - \sqrt{T} \right) + \frac{2\sqrt{T} - 1}{2} G^2 \\
+&<& \frac{D^2}{4} + \sqrt{T}G^2
+\end{eqnarray*}
+
+再由$f$的凸性质，即有$f(\overline{\mathbf{w}}_T) - f(\mathbf{w}) < \left( \frac{1}{T} \sum_{t=1}^T f(\mathbf{w}_t) \right) - f(\mathbf{w}) < \frac{D^2}{4T} + \frac{G^2}{\sqrt{T}} = O\left(\frac{1}{\sqrt{t}}\right)$成立。
+
 	~\\
 	~\\
 	~\\
@@ -202,9 +266,47 @@ F(\mathbf{w}) + \langle \nabla F(\mathbf{w}), \mathbf{w}'-\mathbf{w}  \rangle + 
 第二种途径：参考论文[2]。
 \end{enumerate}
 \begin{myProof}~\\
-	~\\
-	~\\
-	~\\
+$(1)$设最优值为$\mathbf{w}$，由$\lambda$强凸的性质可以知道：
+\begin{eqnarray*}
+F(\mathbf{w}_t) - F(\mathbf{w}) &\le& \langle \nabla F(\mathbf{w}_t), \mathbf{w}_t - \mathbf{w} \rangle - \frac{\lambda}{2} \norm{\mathbf{w} - \mathbf{w}_t}_2^2 \\
+&=& \langle \nabla f(\mathbf{w}_t, \xi_t), \mathbf{w}_t - \mathbf{w} \rangle + \langle \nabla F(\mathbf{w}_t) - f(\mathbf{w}_t, \xi_t) , \mathbf{w}_t - \mathbf{w} \rangle  - \frac{\lambda}{2} \norm{\mathbf{w} - \mathbf{w}_t}_2^2
+\end{eqnarray*}
+记$\epsilon_t = \langle \nabla F(\mathbf{w}_t) - f(\mathbf{w}_t, \xi_t) , \mathbf{w}_t - \mathbf{w} \rangle$进而有：
+\begin{eqnarray*}
+F(\mathbf{w}_t) - F(\mathbf{w})
+&\le& \langle \nabla f(\mathbf{w}_t, \xi_t), \mathbf{w}_t - \mathbf{w} \rangle   - \frac{\lambda}{2} \norm{\mathbf{w} - \mathbf{w}_t}_2^2 + \epsilon_t \\
+&=& \frac{1}{\eta_t} \langle \mathbf{w}_t - \mathbf{w}_{t+1}', \mathbf{w}_t - \mathbf{w} \rangle - \frac{\lambda}{2} \norm{\mathbf{w} - \mathbf{w}_t}_2^2 + \epsilon_t \\
+&=& \frac{1}{2\eta_t} \left[ \norm{\mathbf{w}_t - \mathbf{w}_{t+1}'}_2^2 + \norm{\mathbf{w}_t - \mathbf{w}}_2^2 - \norm{\mathbf{w}_{t+1}' - \mathbf{w}}_2^2 \right] - \frac{\lambda}{2} \norm{\mathbf{w} - \mathbf{w}_t}_2^2 + \epsilon_t \\
+&=& \frac{1}{2\eta_t} \left[ \norm{\mathbf{w}_t - \mathbf{w}}_2^2 - \norm{\mathbf{w}_{t+1}' - \mathbf{w}}_2^2 \right] + \frac{1}{2\eta_t} \norm{\mathbf{w}_t - \mathbf{w}_{t+1}'}_2^2 - \frac{\lambda}{2} \norm{\mathbf{w} - \mathbf{w}_t}_2^2 + \epsilon_t \\
+&=& \frac{1}{2\eta_t} \left[ \norm{\mathbf{w}_t - \mathbf{w}}_2^2 - \norm{\mathbf{w}_{t+1}' - \mathbf{w}}_2^2 \right] + \frac{\eta_t}{2} \norm{\nabla F(\mathbf{w}_t)}_2^2 - \frac{\lambda}{2} \norm{\mathbf{w} - \mathbf{w}_t}_2^2 + \epsilon_t \\
+&\le& \frac{1}{2\eta_t} \left[ \norm{\mathbf{w}_t - \mathbf{w}}_2^2 - \norm{\mathbf{w}_{t+1} - \mathbf{w}}_2^2 \right] + \frac{\eta_t}{2} G^2 - \frac{\lambda}{2} \norm{\mathbf{w} - \mathbf{w}_t}_2^2 + \epsilon_t
+\end{eqnarray*}
+
+将上述不等式从$t=1$加到$T$有：
+\begin{eqnarray*}
+\sum_{t=1}^T F(\mathbf{w}_t) - TF(\mathbf{w}) &\le& \sum_{t=1}^T \left( \frac{1}{2\eta_t} \left[ \norm{\mathbf{w}_t - \mathbf{w}}_2^2 - \norm{\mathbf{w}_{t+1} - \mathbf{w}}_2^2 \right] + \frac{\eta_t}{2} G^2 - \frac{\lambda}{2} \norm{\mathbf{w} - \mathbf{w}_t}_2^2 + \epsilon_t \right) \\
+&=& \sum_{t=2}^T \left( \frac{1}{2\eta_t} - \frac{1}{2\eta_{t-1}} - \frac{\lambda}{2} \right) \norm{\mathbf{w}_t - \mathbf{w}}_2^2 + \left( \frac{1}{2\eta_1} - \frac{\lambda}{2} \right) \norm{\mathbf{w}_1 - \mathbf{w}}_2^2 \\
+&& - \frac{1}{2\eta_{T+1}}\norm{\mathbf{w}_{T+1} - \mathbf{w}}_2^2 + \sum_{t=1}^T \frac{\eta_t}{2} G^2 + \sum_{t=1}^T \epsilon_t \\
+&=&  \sum_{t=2}^T \left( \frac{\lambda t}{2} - \frac{\lambda (t-1)}{2} - \frac{\lambda}{2} \right) \norm{\mathbf{w}_t - \mathbf{w}}_2^2 + \left( \frac{\lambda}{2} - \frac{\lambda}{2} \right) \norm{\mathbf{w}_1 - \mathbf{w}}_2^2 \\
+&& - \frac{1}{2\eta_{T+1}}\norm{\mathbf{w}_{T+1} - \mathbf{w}}_2^2 + \sum_{t=1}^T \frac{1}{2\lambda t} G^2 + \sum_{t=1}^T \epsilon_t \\
+&\le& \sum_{t=1}^T \frac{1}{2\lambda t} G^2 + \sum_{t=1}^T \epsilon_t < \frac{1 + \ln T}{2\lambda} G^2 + \sum_{t=1}^T \epsilon_t
+\end{eqnarray*}
+
+再由Jensen不等式可以得到$F(\overline{\mathbf{w}}_T) - F(\mathbf{w}) \le \frac{1}{T}\sum_{t=1}^T F(\mathbf{w}_t) - F(\mathbf{w}) \le \frac{1 + \ln T}{2\lambda T} G^2 + \frac{1}{T}\sum_{t=1}^T \epsilon_t$，又因为$\mathbb{E}[f(\mathbf{w}_t, \xi_t)] = F(\mathbf{w}_t)$，所以$\mathbb{E}[\epsilon_t] = \mathbb{E}[\langle \nabla F(\mathbf{w}_t) - f(\mathbf{w}_t, \xi_t) , \mathbf{w}_t - \mathbf{w} \rangle] = 0$。最后对上述不等式两边求期望即可得到$\mathbb{E}[F(\overline{\mathbf{w}}_T)] - F(\mathbf{w}) \le \frac{1 + \ln T}{2\lambda T} G^2 = O(\frac{\ln T}{T})$。
+
+$(2)$ 令$\eta_t = \frac{2}{\lambda t}$，则由$(1)$的推导可得
+\begin{eqnarray*}
+\sum_{t=1}^T F(\mathbf{w}_t) - TF(\mathbf{w}) &\le& \sum_{t=1}^T \left( \frac{1}{2\eta_t} - \frac{1}{2\eta_{t-1}} - \frac{\lambda}{2} \right) \norm{\mathbf{w}_t - \mathbf{w}}_2^2 + \left( \frac{1}{2\eta_1} - \frac{\lambda}{2} \right) \norm{\mathbf{w}_1 - \mathbf{w}}_2^2 \\
+&& - \frac{1}{2\eta_{T+1}}\norm{\mathbf{w}_{T+1} - \mathbf{w}}_2^2 + \sum_{t=1}^T \frac{\eta_t}{2} G^2 + \sum_{t=1}^T \epsilon_t \\
+&=& \sum_{t=2}^T \left( \frac{\lambda t}{4} - \frac{\lambda (t-1)}{4} - \frac{\lambda}{2} \right) \norm{\mathbf{w}_t - \mathbf{w}}_2^2 + \left( \frac{\lambda}{4} - \frac{\lambda}{2} \right) \norm{\mathbf{w}_1 - \mathbf{w}}_2^2 \\
+&& - \frac{1}{2\eta_{T+1}}\norm{\mathbf{w}_{T+1} - \mathbf{w}}_2^2 + \sum_{t=1}^T \frac{1}{\lambda t} G^2 + \sum_{t=1}^T \epsilon_t \\
+&\le& \frac{1 + \ln T}{\lambda}G^2 + \sum_{t=1}^T \epsilon_t - \sum_{t=1}^T \norm{\mathbf{w}_t - \mathbf{w}}_2^2 - \frac{1}{2\eta_{T+1}}\norm{\mathbf{w}_{T+1}}_2^2 \\
+&\le& \frac{1 + \ln T}{\lambda}G^2 + \sum_{t=1}^T \epsilon_t \\
+\Longrightarrow \frac{1}{T}\sum_{t=1}^T F(\mathbf{w}_t) - F(\mathbf{w}) &\le& \frac{1 + \ln T}{\lambda T}G^2 + \frac{1}{T}\sum_{t=1}^T \epsilon_t
+\end{eqnarray*}
+
+记$M(\lambda, \frac{1}{\delta}, m) = 2\sqrt{ 4 G^2  \log \frac{m }{\delta} \left( \sum_{t=1}^T \|\mathbf{w}_t - \mathbf{w}\|^2\right)} +  \frac{8G^2}{3\lambda}   \log \frac{m }{\delta} + \frac{4G^2}{\lambda}$，由题目中slides的结论知$\sum_{t=1}^T \epsilon_t \le M(\lambda, \frac{1}{\delta}, m)$以至少$1-\delta$的概率成立，所以$\frac{1}{T}\sum_{t=1}^T F(\mathbf{w}_t) - F(\mathbf{w}) \le \frac{1 + \ln T}{\lambda T}G^2 + \frac{1}{T} M(\lambda, \frac{1}{\delta}, m) = O(\frac{\ln T}{T})$也以至少$1-\delta$的概率成立，再代一步Jensen不等式即可得到$\Pr [ F(\overline{\mathbf{w}}_t) - F(\mathbf{w}) \le \frac{1 + \ln T}{\lambda T}G^2 + \frac{1}{T} M(\lambda, \frac{1}{\delta}, m)] \ge 1 - \delta$，所以$O(\frac{\ln T}{T})$的收敛速率同样以大概率成立。
+
 	~\\	
 	\qed
 \end{myProof}
