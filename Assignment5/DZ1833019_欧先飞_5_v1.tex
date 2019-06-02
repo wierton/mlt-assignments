@@ -111,7 +111,7 @@
 给定$(\mathbf{x}_t, y_t)$，则$\frac{\partial f_t(\mathbf{w}_t)}{\mathbf{w}_t} = \frac{\partial}{\partial \mathbf{w}_t}\left[ (y_t - \mathbf{w}_t^\mathrm{T} \mathbf{x}_t)^2 + \frac{\lambda}{2} \norm{\mathbf{w}_t}_2^2 \right] = 2(\mathbf{w}_t^T \mathbf{x} - y_t) \mathbf{x}_t + \lambda \mathbf{w}_t$，由题意有$\norm{\mathbf{w}_t} \le D$，$\norm{\mathbf{x}_t} \le R$, $|y_t| \le DR$。
 
 所以有$\norm{\frac{\partial f_t(\mathbf{w}_t)}{\mathbf{w}_t}} \le 2|\mathbf{w}_t^\mathrm{T} \mathbf{x}_t - y_t| \norm{\mathbf{x}_t} + \lambda \norm{\mathbf{w}_t} \le 2(DR + DR) R + \lambda D = 4DR^2 + \lambda D$。
-参考定理3.3，将学学习率设置为$\eta_t = \frac{2R}{4DR^2 + \lambda D} \sqrt{t}$，则由定理的结论，可以获得算法的遗憾界为：
+参考pdf第32页定理3.3，将学学习率设置为$\eta_t = \frac{2R}{4DR^2 + \lambda D} \sqrt{t}$，则由定理的结论，可以获得算法的遗憾界为：
 \[
 \sum_{t=1}^T f_t(\mathbf{w}_t) - \min_{\mathbf{w} \in \mathbb{W}} \sum_{t=1}^T f_t(\mathbf{w}) \le \frac{3}{2} 2R [4DR^2 + \lambda D] \sqrt{T} = 3DR[4R^2 + \lambda] \sqrt{T} = O(\sqrt{T})
 \]
@@ -182,7 +182,7 @@ H_{ij} &=& \frac{\partial^2 \exp(-\alpha f(\mathbf{w}))} { \partial w_i \partial
 &=& \frac{\partial}{\partial w_i} \left[ \frac{\partial \exp(-\alpha f(\mathbf{w}))} { \partial w_j } \right] \\
 &=& \frac{\partial}{\partial w_i} \left[ \exp(-\alpha f(\mathbf{w})) (-\alpha \frac{\partial f(\mathbf{w})}{\partial w_j}) \right] \\
 &=& \exp(-\alpha f(\mathbf{w})) (-\alpha \frac{\partial f(\mathbf{w})}{\partial w_i}) (-\alpha \frac{\partial f(\mathbf{w})}{\partial w_j}) + \exp(-\alpha f(\mathbf{w})) (-\alpha) \frac{\partial^2f(\mathbf{w})}{\partial w_i w_j} \\
-&=& \alpha^2 \exp(-\alpha f(\mathbf{w})) \frac{\partial f(\mathbf{w})}{\partial w_i} \frac{\partial f(\mathbf{w})}{\partial w_j} - \alpha \exp(-\alpha f(\mathbf{w})) \frac{\partial^2 f(\mathbf{w})}{\partial \mathbf{w}_i \partial \mathbf{w}_j}
+&=& \alpha^2 \exp(-\alpha f(\mathbf{w})) \frac{\partial f(\mathbf{w})}{\partial w_i} \frac{\partial f(\mathbf{w})}{\partial w_j} - \alpha \exp(-\alpha f(\mathbf{w})) \frac{\partial^2 f(\mathbf{w})}{\partial w_i \partial w_j}
 \end{eqnarray*}
 
 所以$H = \alpha^2 \exp(-\alpha f(\mathbf{w})) \nabla f(\mathbf{w}) \nabla f(\mathbf{w}) ^ \mathbf{T} - \alpha \exp(-\alpha f(\mathbf{w})) \nabla^2 f(\mathbf{w})$，由定义知：f是$\alpha$指数凹的等价于H半负定。
@@ -214,12 +214,12 @@ F(\bar{\mathbf{w}}) - F(\mathbf{w}) &=& F(\frac{1}{T} \sum_{t=1}^T \mathbf{w}_t)
 &=& \frac{1}{T} \sum_{t=1}^T [ F(\mathbf{w}_t) - f_t(\mathbf{w}_t)] + \frac{1}{T} \sum_{t=1}^T [ f_t(\mathbf{w}) - F(\mathbf{w}) ] + \frac{1}{T} \sum_{t=1}^T [ f_t(\mathbf{w}_t) - f_t(\mathbf{w}) ]
 \end{eqnarray*}
 
-由题目中\ref{eqn:regret}知，上述不等式右边最后一项的上界为$\frac{3DG}{2\sqrt{T}}$，而由于$\mathbb{E} [ f_t(\mathbf{w}_t) ] = F(\mathbf{w}_t)$、$\mathbb{E} [ f_t(\mathbf{w}) ] = F(\mathbf{w})$，所以上述不等式右边前两项，从$t=1$到$T$构成分别构成两个鞅差序列。假设$|f_t(\cdot)| \le c$，则对鞅差序列中每一项有$|F(\mathbf{w}_t) - f_t(\mathbf{w}_t)| < 2c$，进而由Azuma不等式可以得到：
-$\Pr \left[ \sum_{t=1}^T \left( F(\mathbf{w}_t - f_t(\mathbf{w}_t)) \right) \ge \epsilon \right] \le \exp( - \frac{\epsilon^2}{8Tc^2} )$，令$\exp( - \frac{\epsilon^2}{8Tc^2} ) = \delta$可以得到：
+由题目中\ref{eqn:regret}知，上述不等式右边最后一项的上界为$\frac{3DG}{2\sqrt{T}}$，而由于$\mathbb{E} [ f_t(\mathbf{w}_t) ] = F(\mathbf{w}_t)$、$\mathbb{E} [ f_t(\mathbf{w}) ] = F(\mathbf{w})$，所以上述不等式右边前两项，从$t=1$到$T$构成分别构成两个鞅差序列。假设$|f_t(\cdot)| \le c$，则对鞅差序列中每一项有$|F(\mathbf{w}_t) - f_t(\mathbf{w}_t)| \le 2c$，进而由Azuma不等式可以得到：
+$\Pr \left[ \sum_{t=1}^T \left( F(\mathbf{w}_t) - f_t(\mathbf{w}_t) \right) \ge \epsilon \right] \le \exp( - \frac{\epsilon^2}{8Tc^2} )$，令$\exp( - \frac{\epsilon^2}{8Tc^2} ) = \delta$可以得到：
 \[
-\Pr\left[\sum_{t=1}^T \left( F(\mathbf{w}_t - f_t(\mathbf{w}_t)) \right) \ge \sqrt{8Tc^2\ln \frac{1}{\delta}}  \right] \le \delta
+\Pr\left[\sum_{t=1}^T \left( F(\mathbf{w}_t) - f_t(\mathbf{w}_t) \right) \ge \sqrt{8Tc^2\ln \frac{1}{\delta}}  \right] \le \delta
 \]
-对于不等式右边第二项同理可得$\Pr\left[\sum_{t=1}^T \left( f_t(\mathbf{w}_t - F(\mathbf{w}_t)) \right) \ge \sqrt{8Tc^2\ln \frac{1}{\delta}}  \right] \le \delta$。将这两个结论代入上述不等式，则可以得到$\Pr\left[ F(\bar{\mathbf{w}}) - F(\mathbf{w}) \le \frac{2}{T}\sqrt{8Tc^2\ln \frac{1}{\delta}} + \frac{3DG}{2\sqrt{T}}\right] = 1 - \delta$，而$\frac{2}{T}\sqrt{8Tc^2\ln \frac{1}{\delta}} + \frac{3DG}{2\sqrt{T}} = 4c\sqrt{\frac{\ln 1 / \delta}{T}} + \frac{3DG}{2\sqrt{T}}  = O(\frac{1}{\sqrt{T}})$。
+对于不等式右边第二项同理可得$\Pr\left[\sum_{t=1}^T \left( f_t(\mathbf{w}_t - F(\mathbf{w}_t)) \right) \ge \sqrt{8Tc^2\ln \frac{1}{\delta}}  \right] \le \delta$。将这两个结论代入上述不等式，则可以得到$\Pr\left[ F(\bar{\mathbf{w}}) - F(\mathbf{w}) \le \frac{2}{T}\sqrt{8Tc^2\ln \frac{1}{\delta}} + \frac{3DG}{2\sqrt{T}}\right] \ge 1 - \delta$，而$\frac{2}{T}\sqrt{8Tc^2\ln \frac{1}{\delta}} + \frac{3DG}{2\sqrt{T}} = 4c\sqrt{\frac{\ln 1 / \delta}{T}} + \frac{3DG}{2\sqrt{T}}  = O(\frac{1}{\sqrt{T}})$。
 
 	~\\
 	~\\	
