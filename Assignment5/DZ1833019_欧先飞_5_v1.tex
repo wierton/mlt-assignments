@@ -107,7 +107,6 @@
 要求：描述算法时，需要给出梯度的具体计算公式、如何设置步长。
 
 \begin{myAnalysis}~\\
-
 给定$(\mathbf{x}_t, y_t)$，则$\frac{\partial f_t(\mathbf{w}_t)}{\mathbf{w}_t} = \frac{\partial}{\partial \mathbf{w}_t}\left[ (y_t - \mathbf{w}_t^\mathrm{T} \mathbf{x}_t)^2 + \frac{\lambda}{2} \norm{\mathbf{w}_t}_2^2 \right] = 2(\mathbf{w}_t^T \mathbf{x} - y_t) \mathbf{x}_t + \lambda \mathbf{w}_t$，由题意有$\norm{\mathbf{w}_t} \le D$，$\norm{\mathbf{x}_t} \le R$, $|y_t| \le DR$。
 
 所以有$\norm{\frac{\partial f_t(\mathbf{w}_t)}{\mathbf{w}_t}} \le 2|\mathbf{w}_t^\mathrm{T} \mathbf{x}_t - y_t| \norm{\mathbf{x}_t} + \lambda \norm{\mathbf{w}_t} \le 2(DR + DR) R + \lambda D = 4DR^2 + \lambda D$。
@@ -119,15 +118,13 @@
 \begin{algorithm}  
 	\caption{Online Regression}  
 	\begin{algorithmic}[1] %每行显示行号  
-		\State{randomly initialize $\mathbf{w}_1$}
+		\State{randomly initialize $\mathbf{w}_1 \in \mathcal{W}$}
 		\For{t = 1...T}
 		  \State{$\mathbf{w}_{t+1}' = \mathbf{w}_t - \frac{2R}{(4DR^2 + \lambda D) \sqrt{t}} \left[ 2(\mathbf{w}_t^\mathrm{T} \mathbf{x}_t - y_t) \mathbf{x}_t + \lambda \mathbf{w}_t \right] $}
 		  \State{ $\mathbf{w}_{t+1} = \frac{D}{\max\{ D, \norm{\mathbf{w}_{t+1}'} \} } \mathbf{w}_{t+1}' $ }
 		\EndFor  
 	\end{algorithmic} 
 \end{algorithm}  
-
-	~\\
 \end{myAnalysis}
 
 \newpage
@@ -151,7 +148,7 @@
 \begin{algorithm}  
 	\caption{Logistic Regression}  
 	\begin{algorithmic}[1] %每行显示行号  
-		\State{randomly initialize $\mathbf{w}_1$}
+		\State{randomly initialize $\mathbf{w}_1 \in \mathcal{W}$}
 		\For{t = 1...T}
 		\State{$\mathbf{w}_{t+1}' = \mathbf{w}_t - \frac{2}{\sqrt{t}} \frac{e^{-y_t \mathbf{w}_t^\mathrm{T} \mathbf{x}_t}}{1 + e^{-y_t \mathbf{w}_t^\mathrm{T} \mathbf{x}_t}} (-y_t \mathbf{x}_t) $}
 		\State{ $\mathbf{w}_{t+1} = \frac{D}{\max\{ D, \norm{\mathbf{w}_{t+1}'} \} } \mathbf{w}_{t+1}' $ }
@@ -159,13 +156,27 @@
 	\end{algorithmic} 
 \end{algorithm}
 
-由定理3.3的结论，我们可以获得如下的遗憾界：
+由pdf第32页定理3.3的结论，我们可以获得如下的遗憾界：
 \[
 \sum_{t=1}^T f_t(\mathbf{w}_t) - \min_{\mathbf{w} \in \mathbb{W}} \sum_{t=1}^T f_t(\mathbf{w}) \le \frac{3}{2} 2R \times R \sqrt{T} = 3R^2 \sqrt{T} = O(\sqrt{T})
 \]
 
-	~\\	
-	~\\
+由于$\log(1 + \exp(-y_t \mathbf{w}_t^\mathrm{T} \mathbf{x}_t))$是$\alpha$指数凹的，所以采用在线牛顿法可以获得更好的渐进界，参考pdf第35页定理3.5的证明，使用算法如下：
+\begin{algorithm}  
+	\caption{ONS}  
+	\begin{algorithmic}[1] %每行显示行号  
+		\State{randomly initialize $\mathbf{w}_1 \in \mathcal{W}$}
+		\State{$A_0 = \frac{4}{\beta^2D^2} I$}
+		\For{t = 1...T}
+		\State{$A_t = A_{t-1} + \nabla f_t(\mathbf{w}_t) \nabla f_t(\mathbf{w}_t) ^ \mathrm{T} $}
+		\State{$\mathbf{w}_{t+1}' = \mathbf{w}_t - \frac{1}{\beta} A_t^{-1} \nabla f_t(\mathbf{w}_t) $}
+		\State{ $\mathbf{w}_{t+1} = {\arg\min}_{\mathbf{w} \in \mathcal{W}} (\mathbf{w} - \mathbf{w}_{t+1}')^\mathrm{T} A_t (\mathbf{w} - \mathbf{w}_{t+1}') $ }
+		\EndFor  
+	\end{algorithmic} 
+\end{algorithm}
+
+其中$\beta$是输入参数，按照定理3.5的证明，在线牛顿法可以获得$\frac{1}{2\beta}(1 + d \log T) = O(\log T)$的渐进界。
+
 \end{myAnalysis}
 
 \newpage
