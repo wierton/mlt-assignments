@@ -166,7 +166,7 @@
 	\caption{ONS}  
 	\begin{algorithmic}[1] %每行显示行号  
 		\State{randomly initialize $\mathbf{w}_1 \in \mathcal{W}$}
-		\State{$A_0 = \frac{4}{\beta^2D^2} I$}
+		\State{$A_0 = \frac{1}{4\beta^2D^2} I$}
 		\For{t = 1...T}
 		\State{$A_t = A_{t-1} + \nabla f_t(\mathbf{w}_t) \nabla f_t(\mathbf{w}_t) ^ \mathrm{T} $}
 		\State{$\mathbf{w}_{t+1}' = \mathbf{w}_t - \frac{1}{\beta} A_t^{-1} \nabla f_t(\mathbf{w}_t) $}
@@ -247,7 +247,7 @@ F(\bar{\mathbf{w}}) -  F(\mathbf{w}) =O\left( \frac{1}{\sqrt{T}}\right).
 \begin{myAnalysis}~\\
 $(1)$两者都利用凸函数的条件对当前解与最优解的上界进行评估，并利用等式$\langle \mathbf{a} - \mathbf{b}, \mathbf{a} - \mathbf{c} \rangle = \frac{1}{2} ( \norm{\mathbf{a}-\mathbf{b}}_2^2 + \norm{\mathbf{a}-\mathbf{c}}_2^2 - \norm{\mathbf{b}-\mathbf{c}}_2^2 )$将上界转化为逐差的形式，然后对T项累加以放缩上界。
 ~\\
-$(2)$不同的地方在于SGD的证明过程直接对函数空间$\mathcal{F}$的期望$F$进行放缩，而习题4中的证明中所利用到的遗憾界是从采样得到的函数$f_t$出发开始放缩。
+$(2)$不同的地方在于SGD的证明过程直接对函数空间$\mathcal{F}$的期望$F$进行放缩，而习题4中的证明中所利用到的遗憾界是从采样得到的函数$f_t$出发开始放缩。同时定理2.1中证明过程使用的是定长步长，而SGD中使用的是递减步长。
 	~\\
 	~\\	
 	~\\
